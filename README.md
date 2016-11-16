@@ -11,7 +11,7 @@ pip install Scrapy
 ```
 cd ~/fccSpider
 ```
-* Run this tool, replacing USER with your Free Code Camp username.
+* Run this tool, replacing `USER` with your Free Code Camp username.
 ```
 scrapy crawl fccSpider -o items.json -t json -a username=USER
 ```
