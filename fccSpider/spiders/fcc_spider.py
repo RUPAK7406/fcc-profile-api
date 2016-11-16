@@ -35,4 +35,3 @@ class fccSpider(scrapy.Spider):
         return result
 
 # re(r'(^.*)?\?')
-# scrapy crawl fccSpider -o items.json -t json -a username=htko89
