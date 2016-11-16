@@ -49,3 +49,6 @@ Temporary Items
 # Custom Directories
 legacy/
 apps/keys/
+/items.json
+*.pyc
+
