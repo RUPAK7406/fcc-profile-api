@@ -1,5 +1,5 @@
 import scrapy
-
+import urlparse
 
 class fccSpider(scrapy.Spider):
     name = "fccSpider"
@@ -15,14 +15,23 @@ class fccSpider(scrapy.Spider):
             tableName = table.css("th.col-xs-5::text").extract_first()
             result[tableName] = []
             for challenge in table.css("tr"):
-                name = challenge.css("td.col-xs-5.hidden-xs::text").extract_first()
+                name = challenge.css("td.col-xs-12.visible-xs a::text").extract_first()
                 if name:
                     date = challenge.css("td.col-xs-2.hidden-xs::text").extract()
                     dateLen = len(date)
                     if dateLen == 1:
                         date.append("None")
-                    link = challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first()
-                    code = challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first()
+                    data = challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first()
+                    if "/challenges/" in data:
+                        dataSplit = str(data).split("?",1)
+                        link = "https://www.freecodecamp.com" + dataSplit[0]
+                        if "solution=" in data:
+                            code = dataSplit[1][9:]
+                        else:
+                            code = None
+                    else:
+                        link = data
+                        code = None
                     entry = {
                         'Name': name,
                         'Date Completed': date[0],
