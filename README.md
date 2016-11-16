@@ -15,4 +15,4 @@ cd ~/fccSpider
 ```
 scrapy crawl fccSpider -o items.json -t json -a username=USER
 ```
-* Your data will be appended to `items.json` in `~/fccSpider`
+* Your data will be appended to `items.json` in `~/fccSpider`, with your challenge solution in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
