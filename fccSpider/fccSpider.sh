@@ -25,7 +25,7 @@
     echo "+ Application Usage:"
     echo "+ ./fccSpider.sh [spider] [username]"
     echo "+ Available spiders are:"
-    echo $(ls ./spiders/*_spider.py)
-    echo "Ex: + ./fccSpider.sh fccMap myfccusername"
+    echo "+ "$(ls ./spiders/*_spider.py)
+    echo "+ Example: ./fccSpider.sh fccMap myfccusername"
   fi
   echo
