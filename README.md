@@ -1,8 +1,9 @@
 # FCC Spider
 Built on [Scrapy](https://scrapy.org/) & [Python](https://www.python.org/), this tool converts your Free Code Camp challenge profile into JSON data.
 
-## Usage
-* Install Python
+## Install
+* There are bash scripts in this project, hence it requires linux. You can use it without linux by learning how it works in `fccSpider.sh`.
+* Install Python 2
 * Install Scrapy
 ```
 pip install Scrapy
@@ -11,8 +12,14 @@ pip install Scrapy
 ```
 cd ~/fccSpider
 ```
-* Run this tool, replacing `USER` with your Free Code Camp username.
+## "+ Application Usage:
+* In `~/fccSpider`:
 ```
-scrapy crawl fccSpider -o items.json -t json -a username=USER
+./fccSpider.sh [spiderName] [username]"
+Example: ./fccSpider.sh fccMap myfccusername"
 ```
-* Your data will be appended to `items.json` in `~/fccSpider`, with your challenge solution in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
+* Currently available spiders:
+```
+fccMap, fccProfile (WIP)
+```
+* Your data will be appended to `[spiderName].json` in `~/fccSpider`, where is the spider name. Your challenge solutions are in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).

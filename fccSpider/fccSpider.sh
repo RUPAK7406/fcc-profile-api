@@ -23,7 +23,7 @@
     set +x # echo off
   else
     echo "+ Application Usage:"
-    echo "+ ./fccSpider.sh [spider] [username]"
+    echo "+ ./fccSpider.sh [spiderName] [username]"
     echo "+ Available spiders are:"
     echo "+ "$(ls ./spiders/*_spider.py)
     echo "+ Example: ./fccSpider.sh fccMap myfccusername"
