@@ -22,10 +22,10 @@
     fi
     set +x # echo off
   else
-    echo "+ Application Usage:"
-    echo "+ ./fccSpider.sh [spiderName] [username]"
+    echo "+ Application Comments:"
+    echo "+ Usage   : ./fccSpider.sh [spiderName] [username]"
+    echo "+ Example : ./fccSpider.sh fccMap myfccusername"
     echo "+ Available spiders are:"
     echo "+ "$(ls ./spiders/*_spider.py)
-    echo "+ Example: ./fccSpider.sh fccMap myfccusername"
   fi
   echo
