@@ -51,4 +51,4 @@ legacy/
 apps/keys/
 /items.json
 *.pyc
-
+/sources

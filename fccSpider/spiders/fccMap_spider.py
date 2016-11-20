@@ -2,7 +2,7 @@ import scrapy
 import urlparse
 
 class fccSpider(scrapy.Spider):
-    name = "fccSpider"
+    name = "fccProfileSpider"
     def __init__(self, username=None, *args, **kwargs):
         super(fccSpider, self).__init__(*args, **kwargs)
         self.start_urls = ['https://www.freecodecamp.com/%s' % username]
