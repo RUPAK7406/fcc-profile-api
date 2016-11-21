@@ -15,7 +15,7 @@
     set -x # echo commands
     set -x
     mkdir output # make output directory
-    rm -r ./output/* # removing all previous outputs
+    rm -rf ./output/* # removing all previous outputs
     find . -name "*.pyc" -type f -delete
     scrapy crawl $2 -o ./output/$2.json -t json -a username=$1
     find . -name "*.pyc" -type f -delete
