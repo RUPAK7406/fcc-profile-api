@@ -21,11 +21,11 @@ cd ~/fccSpider
 ## Application Usage:
 * In `~/fccSpider`:
 ```
-./fccSpider.sh [spiderName] [username]"
-Example: ./fccSpider.sh fccMap myfccusername"
+./fccSpider.sh [username] [spiderName]"
+Example: ./fccSpider.sh myfccusername fccProfile"
 ```
 * Currently available spiders:
 ```
 fccProfile, fccMap (WIP)
 ```
-* Your data will be appended to `[spiderName].json` in `~/fccSpider`, where is the spider name. Your challenge solutions are in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
+* Your data will be appended to `[spiderName].json` in `~/fccSpider/output/`. Your challenge solutions are in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
