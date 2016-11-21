@@ -1,16 +1,16 @@
 import scrapy
 import urlparse
 
-class fccSpider(scrapy.Spider):
-    name = "fccProfileSpider"
+class fccProfile(scrapy.Spider):
+    name = "fccProfile"
     def __init__(self, username=None, *args, **kwargs):
-        super(fccSpider, self).__init__(*args, **kwargs)
+        super(fccProfile, self).__init__(*args, **kwargs)
         self.start_urls = ['https://www.freecodecamp.com/%s' % username]
 
 
     def parse(self, response):
-        self.log('Loop Start')
         result = {}
+        self.log('Loop Start')
         for table in response.css(".table-striped"):
             tableName = table.css("th.col-xs-5::text").extract_first()
             result[tableName] = []

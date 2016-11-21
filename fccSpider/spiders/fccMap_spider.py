@@ -1,11 +1,11 @@
 import scrapy
 import urlparse
 
-class fccSpider(scrapy.Spider):
-    name = "fccProfileSpider"
+class fccMap(scrapy.Spider):
+    name = "fccMap"
     def __init__(self, username=None, *args, **kwargs):
-        super(fccSpider, self).__init__(*args, **kwargs)
-        self.start_urls = ['https://www.freecodecamp.com/%s' % username]
+        super(fccMap, self).__init__(*args, **kwargs)
+        self.start_urls = ['https://www.freecodecamp.com/map']
 
 
     def parse(self, response):
