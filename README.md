@@ -4,6 +4,10 @@ Built on [Scrapy](https://scrapy.org/) & [Python](https://www.python.org/), this
 ## Install
 * There are bash scripts in this project, hence it requires linux. You can use it without linux by learning how it works in `fccSpider.sh`.
 * Install Python 2
+```
+apt-get update
+apt-get install python-pip
+```
 * Install Scrapy
 ```
 pip install Scrapy
