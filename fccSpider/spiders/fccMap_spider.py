@@ -1,46 +1,31 @@
 import scrapy
-import urlparse
+from collections import OrderedDict
 
 class fccMap(scrapy.Spider):
     name = "fccMap"
     def __init__(self, username=None, *args, **kwargs):
         super(fccMap, self).__init__(*args, **kwargs)
-        self.start_urls = ['https://www.freecodecamp.com/map']
+        self.start_urls = ['http://local.htko.ca/map.html']
 
 
     def parse(self, response):
-        self.log('Loop Start')
         result = {}
-        for table in response.css(".table-striped"):
-            tableName = table.css("th.col-xs-5::text").extract_first()
-            result[tableName] = []
-            for challenge in table.css("tr"):
-                name = challenge.css("td.col-xs-12.visible-xs a::text").extract_first()
-                if name:
-                    date = challenge.css("td.col-xs-2.hidden-xs::text").extract()
-                    dateLen = len(date)
-                    if dateLen == 1:
-                        date.append("None")
-                    data = challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first()
-                    if "/challenges/" in data:
-                        dataSplit = str(data).split("?",1)
-                        link = "https://www.freecodecamp.com" + dataSplit[0]
-                        if "solution=" in data:
-                            code = dataSplit[1][9:]
-                        else:
-                            code = None
-                    else:
-                        link = data
-                        code = None
-                    entry = {
-                        'Name': name,
-                        'Date Completed': date[0],
-                        'Date Updated': date[1],
-                        'Link': link,
-                        'Code': code,
-                    }
-                    result[tableName].append(entry)
-        self.log('Loop End')
+        for table in response.css("#accordion"):
+            # only one table, so no need to find titles. Skip a subsection for dictionary.
+            for certIdx, cert in enumerate(table.css("div.certBlock")): #list certs in table and loop
+                certName = str("%02d"%certIdx) + " " + table.css("h2 > a::text").extract()[certIdx] #find the title
+                result[certName] = {} #set up empty dictionary under title
+                for chapIdx, chap in enumerate(cert.css("div.chapterBlock")): #list chapters in cert and loop
+                    chapName = str("%02d"%chapIdx) + " " + cert.css("h3 > a::text").extract()[chapIdx] #find the title
+                    result[certName][chapName] = {} #set up empty dictionary under title
+                    for chalIdx, chal in enumerate(chap.css("p.challenge-title")): #list challenges in chapters and loop
+                        chalName = str("%02d"%chalIdx) + " " + str(chal.css("a span::text").extract_first()) #find the title
+                        chalLink = chal.css("a::attr(href)").extract_first() #find the link
+                        chalStatus = chal.css("a span.sr-only::text").extract_first() #find the status
+                        result[certName][chapName][chalName] = {
+                            'link': chalLink,
+                            'status': chalStatus,
+                        }
         return result
 
-# re(r'(^.*)?\?')
+# str("%02d"%certIdx) + " " +
