@@ -1,5 +1,4 @@
 import scrapy
-import urlparse
 
 class fccProfile(scrapy.Spider):
     name = "fccProfile"
