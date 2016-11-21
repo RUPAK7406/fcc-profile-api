@@ -16,7 +16,7 @@ pip install Scrapy
 ```
 cd ~/fccSpider
 ```
-* `~/fccSpider` should contain `fccSpider.sh` and a `scrapy` folder.
+* `~/fccSpider` should contain `fccSpider.sh`, a `fccSpider` folder and a `output` folder.
 
 ## Application Usage:
 * In `~/fccSpider`:
