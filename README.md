@@ -18,7 +18,7 @@ cd ~/fccSpider
 ```
 * `~/fccSpider` should contain `fccSpider.sh` and a `scrapy` folder.
 
-## "+ Application Usage:
+## Application Usage:
 * In `~/fccSpider`:
 ```
 ./fccSpider.sh [spiderName] [username]"
