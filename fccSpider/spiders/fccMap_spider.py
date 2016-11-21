@@ -1,5 +1,7 @@
 import scrapy
 from collections import OrderedDict
+import json
+import os
 
 class fccMap(scrapy.Spider):
     name = "fccMap"
@@ -10,10 +12,12 @@ class fccMap(scrapy.Spider):
 
     def parse(self, response):
         result = OrderedDict()
+        self.log('Loop Start')
         for table in response.css("#accordion"):
             # only one table, so no need to find titles. Skip a subsection for dictionary.
             for certIdx, cert in enumerate(table.css("div.certBlock")): #list certs in table and loop
                 certName = table.css("h2 > a::text").extract()[certIdx] #find the title
+                result[certName] = '' #set up empty dictionary under title
                 result[certName] = OrderedDict() #set up empty dictionary under title
                 for chapIdx, chap in enumerate(cert.css("div.chapterBlock")): #list chapters in cert and loop
                     chapName = cert.css("h3 > a::text").extract()[chapIdx] #find the title
@@ -29,6 +33,11 @@ class fccMap(scrapy.Spider):
                             'link': chalLink,
                             'status': chalStatus,
                         }
-        return result
+        self.log('Loop End')
+        path = os.getcwd() + "/output/fccMap.json"
+        self.log('Output: '+path)
+        with open(path, 'w') as output:
+            json.dump(result, output, indent=2)
+
 
 # str("%02d"%certIdx) + " " +
