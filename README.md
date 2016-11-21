@@ -26,6 +26,6 @@ Example: ./fccSpider.sh fccMap myfccusername"
 ```
 * Currently available spiders:
 ```
-fccMap, fccProfile (WIP)
+fccProfile, fccMap (WIP)
 ```
 * Your data will be appended to `[spiderName].json` in `~/fccSpider`, where is the spider name. Your challenge solutions are in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
