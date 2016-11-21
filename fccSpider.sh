@@ -4,7 +4,7 @@
 
 # global variables
   echo
-  echo "Permissions required:"
+  echo "User permissions required for execution:"
   echo "Ability to delete compiled python files in project."
 
 # action
@@ -14,10 +14,11 @@
     echo -e "+ Spider: ($1) with username: ($2)"
     set -x # echo commands
     set -x
+    mkdir output
     find . -name "*.pyc" -type f -delete
     if [ -n "$2" ]; then
       # cd fccSpider
-      scrapy crawl $1 -o $1.json -t json -a username=$2
+      scrapy crawl $1 -o ./output/$1.json -t json -a username=$2
       find . -name "*.pyc" -type f -delete
     else
       echo -e "Please supply a username"
