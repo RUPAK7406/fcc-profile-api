@@ -10,7 +10,7 @@
 # action
   echo
   echo -e "Action:"
-  if [ -n "$1"] && [ -f "./fccSpider/spiders/$2_spider.py" ]; then
+  if [ -f "./fccSpider/spiders/$2_spider.py" ]; then
     echo -e "+ User: ($1). Spider: ($2)."
     set -x # echo commands
     set -x
