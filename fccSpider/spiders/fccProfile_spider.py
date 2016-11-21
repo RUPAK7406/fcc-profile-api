@@ -8,7 +8,7 @@ class fccProfile(scrapy.Spider):
 
 
     def parse(self, response):
-        result = {}
+        result = OrderedDict()
         self.log('Loop Start')
         for table in response.css(".table-striped"):
             tableName = table.css("th.col-xs-5::text").extract_first()
@@ -40,6 +40,8 @@ class fccProfile(scrapy.Spider):
                     }
                     result[tableName].append(entry)
         self.log('Loop End')
-        return result
+        with open(os.getcwd() + "/output/fccProfile.json", 'w') as output:
+            json.dump(result, output, indent=2)
+
 
 # re(r'(^.*)?\?')
