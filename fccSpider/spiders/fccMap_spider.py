@@ -16,7 +16,7 @@ class fccMap(scrapy.Spider):
     def parse(self, response):
         # Clear string function
         def clrstr(string):
-            string = str(string).lstrip().translate(None, "(.)")
+            string = str(string).lstrip().translate({ord(char): None for char in "()."})
             if string == "None":
                 string = ""
             return string
