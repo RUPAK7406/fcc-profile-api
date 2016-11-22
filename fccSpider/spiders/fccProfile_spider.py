@@ -33,13 +33,15 @@ class fccProfile(scrapy.Spider):
             for challenge in table.css("tr"):
                 name = clrstr( challenge.css("td.col-xs-12.visible-xs a::text").extract_first() )
                 if name:
-                    date = clrstr( challenge.css("td.col-xs-2.hidden-xs::text").extract() )
-                    link = challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first()
+                    date = challenge.css("td.col-xs-2.hidden-xs::text").extract()
+                    link = clrstr( challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first() )
+                    self.log(link)
                     if len(date) == 1: # if date only contains `completed date`
                         date.append("") # append empty date
+                    date = clrstr(date)
                     if "solution=" in link:
-                        link = str(link).split("?",1)[0]
-                        code = str(link).split("?",1)[1][9:]
+                        link = link.split("?",1)[0]
+                        code = link.split("?",1)[1]
                     else:
                         code = ""
                     if name in lookup.keys():
