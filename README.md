@@ -12,17 +12,39 @@ apt-get install python-pip
 ```
 pip install Scrapy
 ```
-* Download this repository into a directory, say `~/fccSpider`, and enter it.
+* Extract [latest version](https://github.com/htko89/FCC-Spider/releases) into a directory, say `~/fccSpider`, and enter it.
 ```
 cd ~/fccSpider
 ```
-* `~/fccSpider` should contain `fccSpider.sh`, `scrapy.cfg`, `fccSpider` folder, and an `output` folder.
-
-## Application Usage:
-* In `~/fccSpider`:
+* Set executable permissions:
 ```
+chmod ~/fccSpider 755 -R .
+```
+* `~/fccSpider` should contain `fccSpider`, `output` folders and `fccSpider.sh`, `scrapy.cfg` files.
+
+## Usage / Changelog
+
+* In `~/fccSpider`:
+### 0.2
+* Usage:
+```
+cd ~/fccSpider
 ./fccSpider.sh [username]
 Example: ./fccSpider.sh myfccusername
 ```
-* Your data will be output to `map.json` and `map.failed.json` in `~/fccSpider/output/`. Make sure files in this folder are backed up, as they are wiped per execution. 
-* Your challenge solutions are in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
+* Data output to `map.json` and `map.failed.json` in `~/fccSpider/output/`. Make sure files in this folder are backed up, as they are wiped per execution.
+* Challenge solution code in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
+
+### 0.1
+* Usage:
+```
+cd ~/fccSpider
+./fccSpider.sh [username] [spiderName]
+Example: ./fccSpider.sh myfccusername fccProfile
+```
+* Available spiders:
+```
+fccProfile, fccMap (WIP)
+```
+* Data output to `[spiderName].json` in `~/fccSpider/output/`.
+* Challenge solutions code in URL encoding.
