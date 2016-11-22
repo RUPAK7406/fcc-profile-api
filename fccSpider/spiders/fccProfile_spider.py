@@ -3,6 +3,7 @@ from collections import OrderedDict
 import json
 import os
 
+
 class fccProfile(scrapy.Spider):
     name = "fccProfile"
     def __init__(self, username=None, *args, **kwargs):
@@ -13,37 +14,42 @@ class fccProfile(scrapy.Spider):
     def parse(self, response):
         # Clear string function
         def clrstr(string):
-           string = str(string).lstrip()
-           if string == "None":
-               string = ""
-           return string
-        # Start scraping
-        with open(os.getcwd() + "/output/fccMap.json") as output:
+            string = str(string).lstrip()
+            if string == "None":
+                string = ""
+            return string
+        # Setup Paths
+        resultPath = os.getcwd() + "/output/fccMap.json"
+        lookupPath = os.getcwd() + "/output/fccMap.lookup.json"
+        # Setup dictionaries
+        with open(resultPath) as output:
             result = json.load(output, object_pairs_hook=OrderedDict)
+        with open(lookupPath) as output:
+            lookup = json.load(output, object_pairs_hook=OrderedDict)
+        # Start scraping
         self.log("Loop Start")
         for table in response.css(".table-striped"):
-            # tableName = table.css("th.col-xs-5::text").extract_first()
-            # result[tableName] = []
+            # Ignore table separation because it is not organized the same way as the map.
             for challenge in table.css("tr"):
-                name = challenge.css("td.col-xs-12.visible-xs a::text").extract_first()
+                name = clrstr( challenge.css("td.col-xs-12.visible-xs a::text").extract_first() )
                 if name:
-                    date = challenge.css("td.col-xs-2.hidden-xs::text").extract()
+                    date = clrstr( challenge.css("td.col-xs-2.hidden-xs::text").extract() )
+                    link = clrstr( challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first() )
                     if len(date) == 1: # if date only contains `completed date`
                         date.append("") # append empty date
-                    link = challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first()
                     if "solution=" in link:
                         code = str(link).split("?",1)[1][9:]
                     else:
                         code = ""
-                    entry = {
-                        "Name": name,
-                        "Date Completed": date[0],
-                        "Date Updated": date[1],
-                        "Link": link,
-                        "Code": code,
-                    }
-                    result[tableName].append(entry)
+                    self.log(lookup[name])
+                    # result[parent[0]][parent[1]][name]["_link"] = link
+                    # result[parent[0]][parent[1]][name]["_dateC"] = date[0]
+                    # result[parent[0]][parent[1]][name]["_dateU"] = date[1]
+                    # result[parent[0]][parent[1]][name]["_code"] = code
         self.log("Loop End")
+        self.log("Output: "+resultPath)
+        with open(resultPath, "w") as output:
+            json.dump(result, output, indent=2)
 
 
 # re(r"(^.*)?\?")
