@@ -16,10 +16,10 @@ class fccMap(scrapy.Spider):
     def parse(self, response):
         # Clear string function
         def clrstr(string):
-           string = str(string).lstrip()
-           if string == "None":
-               string = ""
-           return string
+            string = str(string).lstrip()
+            if string == "None":
+                string = ""
+            return string
         # Setup Paths
         resultPath = os.getcwd() + "/output/fccMap.json"
         lookupPath = os.getcwd() + "/output/fccMap.lookup.json"
