@@ -41,11 +41,14 @@ class fccProfile(scrapy.Spider):
                         code = str(link).split("?",1)[1][9:]
                     else:
                         code = ""
-                    parent = lookup[name]
-                    result[parent[0]][parent[1]][name]["_link"] = link
-                    result[parent[0]][parent[1]][name]["_dateC"] = date[0]
-                    result[parent[0]][parent[1]][name]["_dateU"] = date[1]
-                    result[parent[0]][parent[1]][name]["_code"] = code
+                    if name in lookup.keys():
+                        parent = lookup[name]
+                        result[parent[0]][parent[1]][name]["_link"] = link
+                        result[parent[0]][parent[1]][name]["_dateC"] = date[0]
+                        result[parent[0]][parent[1]][name]["_dateU"] = date[1]
+                        result[parent[0]][parent[1]][name]["_code"] = code
+                    else:
+                        self.log(name+" ("+date[0]+") no longer exists in FCC's curriculum map")
         self.log("Loop End")
         self.log("Output: "+resultPath)
         with open(resultPath, "w") as output:
