@@ -21,8 +21,8 @@ class fccMap(scrapy.Spider):
                string = ""
            return string
         # Setup Paths
-        resultpath = os.getcwd() + "/output/fccMap.json"
-        lookuppath = os.getcwd() + "/output/fccMap.lookup.json"
+        resultPath = os.getcwd() + "/output/fccMap.json"
+        lookupPath = os.getcwd() + "/output/fccMap.lookup.json"
         # Setup dictionaries
         result = OrderedDict()
         lookup = OrderedDict()
