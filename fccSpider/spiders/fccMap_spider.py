@@ -43,6 +43,7 @@ class fccMap(scrapy.Spider):
                     result[certName][chapName]["_time"] = chapTime[1:-1]
                     result[certName][chapName]["_desc"] = chapDesc
                     for chalIdx, chal in enumerate(chap.css("p.challenge-title")): #list challenges in chapters and loop
+                        chalName = clrstr(   chal.css("::text").replace(".", "")
                         chalLink = clrstr(   chal.css("a::attr(href)").extract_first() ) #find the link
                         chalStatus = clrstr( chal.css("a span.sr-only::text").extract_first() ) #find the status
                         chalExist = clrstr(  chal.css("em::text").extract_first() ) #find if it exists
