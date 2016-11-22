@@ -35,13 +35,12 @@ class fccProfile(scrapy.Spider):
                 if name:
                     date = challenge.css("td.col-xs-2.hidden-xs::text").extract()
                     link = clrstr( challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first() )
-                    self.log(link)
                     if len(date) == 1: # if date only contains `completed date`
                         date.append("") # append empty date
                     date = clrstr(date)
-                    if "solution=" in link:
-                        link = link.split("?",1)[0]
+                    if "?solution=" in link:
                         code = link.split("?",1)[1]
+                        link = link.split("?",1)[0]
                     else:
                         code = ""
                     if name in lookup.keys():
