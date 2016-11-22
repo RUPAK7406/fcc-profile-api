@@ -5,7 +5,7 @@ import os
 
 
 class fccProfile(scrapy.Spider):
-    name = "fccProfile"
+    name = "profile"
     def __init__(self, username=None, *args, **kwargs):
         super(fccProfile, self).__init__(*args, **kwargs)
         self.start_urls = ["https://www.freecodecamp.com/%s" % username]
@@ -19,13 +19,15 @@ class fccProfile(scrapy.Spider):
                 string = ""
             return string
         # Setup Paths
-        resultPath = os.getcwd() + "/output/fccMap.json"
-        lookupPath = os.getcwd() + "/output/fccMap.lookup.json"
+        resultPath = os.getcwd() + "/output/map.json"
+        lookupPath = os.getcwd() + "/output/map.lookup.json"
+        failedPath = os.getcwd() + "/output/map.failed.json"
         # Setup dictionaries
         with open(resultPath) as output:
             result = json.load(output, object_pairs_hook=OrderedDict)
         with open(lookupPath) as output:
             lookup = json.load(output, object_pairs_hook=OrderedDict)
+        failed = OrderedDict()
         # Start scraping
         self.log("Loop Start")
         for table in response.css(".table-striped"):
@@ -37,24 +39,28 @@ class fccProfile(scrapy.Spider):
                     link = clrstr( challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first() )
                     if len(date) == 1: # if date only contains `completed date`
                         date.append("") # append empty date
-                    date = clrstr(date)
                     if "?solution=" in link:
-                        code = link.split("?",1)[1]
-                        link = link.split("?",1)[0]
+                        code = link.split("?",1)[1][9:]
                     else:
                         code = ""
                     if name in lookup.keys():
                         parent = lookup[name]
-                        result[parent[0]][parent[1]][name]["_link"] = link
-                        result[parent[0]][parent[1]][name]["_dateC"] = date[0]
-                        result[parent[0]][parent[1]][name]["_dateU"] = date[1]
+                        result[parent[0]][parent[1]][name]["_dateC"] = clrstr(date[0])
+                        result[parent[0]][parent[1]][name]["_dateU"] = clrstr(date[1])
                         result[parent[0]][parent[1]][name]["_code"] = code
                     else:
+                        failed[name] = OrderedDict()
+                        failed[name]["_link"] = link
+                        failed[name]["_dateC"] = clrstr(date[0])
+                        failed[name]["_dateU"] = clrstr(date[1])
+                        failed[name]["_code"] = code
                         self.log(name+" ("+date[0]+") no longer exists in FCC's curriculum map")
         self.log("Loop End")
         self.log("Output: "+resultPath)
         with open(resultPath, "w") as output:
             json.dump(result, output, indent=2)
+        with open(failedPath, "w") as output:
+            json.dump(failed, output, indent=2)
 
 
 # re(r"(^.*)?\?")

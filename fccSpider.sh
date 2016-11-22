@@ -10,22 +10,20 @@
 # action
   echo
   echo -e "Action:"
-  if [ -f "./fccSpider/spiders/$2_spider.py" ]; then
-    echo -e "+ User: ($1). Spider: ($2)."
+  if [ -n "$1" ]; then
+    echo -e "+ User: ($1)."
     set -x # echo commands
     set -x
     mkdir output # make output directory
-    rm -f ./output/$2.json # removing all previous outputs
-    rm -f ./output/$2.*.json # removing all previous outputs
-    find . -name "*.pyc" -type f -delete
-    scrapy crawl $2 -a username=$1
+    rm -f ./output/*.json # removes all previous outputs for clean operation
+    find . -name "*.pyc" -type f -delete # clear compiled / cache python files for clean operation
+    scrapy crawl map -a username=$1
+    scrapy crawl profile -a username=$1
     find . -name "*.pyc" -type f -delete
     set +x # echo off
   else
     echo "+ Application Comments:"
-    echo "+ Usage   : ./fccSpider.sh [username] [spiderName]"
-    echo "+ Example : ./fccSpider.sh myfccusername fccProfile"
-    echo "+ Available spiders are:"
-    echo "+ "$(ls ./fccSpider/spiders/*_spider.py)
+    echo "+ Usage   : ./fccSpider.sh [username]"
+    echo "+ Example : ./fccSpider.sh myfccusername"
   fi
   echo

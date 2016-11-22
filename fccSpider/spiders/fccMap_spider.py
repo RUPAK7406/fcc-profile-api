@@ -5,7 +5,7 @@ import os
 
 
 class fccMap(scrapy.Spider):
-    name = "fccMap"
+    name = "map"
     def __init__(self, username=None, *args, **kwargs):
         super(fccMap, self).__init__(*args, **kwargs)
         self.start_urls = ["https://www.freecodecamp.com/map"]
@@ -21,8 +21,8 @@ class fccMap(scrapy.Spider):
                 string = ""
             return string
         # Setup Paths
-        resultPath = os.getcwd() + "/output/fccMap.json"
-        lookupPath = os.getcwd() + "/output/fccMap.lookup.json"
+        resultPath = os.getcwd() + "/output/map.json"
+        lookupPath = os.getcwd() + "/output/map.lookup.json"
         # Setup dictionaries
         result = OrderedDict()
         lookup = OrderedDict()
