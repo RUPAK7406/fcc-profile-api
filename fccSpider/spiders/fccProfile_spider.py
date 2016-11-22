@@ -1,4 +1,7 @@
 import scrapy
+from collections import OrderedDict
+import json
+import os
 
 class fccProfile(scrapy.Spider):
     name = "fccProfile"
