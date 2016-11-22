@@ -34,6 +34,7 @@ class fccMap(scrapy.Spider):
                     if not chapDesc:
                         chapDesc = ""
                     result[certName][chapName] = OrderedDict() #set up empty dictionary under title
+                    result[certName][chapName]["_parent"] = certName
                     result[certName][chapName]["_time"] = chapTime[1:-1]
                     result[certName][chapName]["_desc"] = chapDesc
                     for chalIdx, chal in enumerate(chap.css("p.challenge-title")): #list challenges in chapters and loop
@@ -46,6 +47,7 @@ class fccMap(scrapy.Spider):
                         if chal.css(".disabled.ion-locked"):
                             chalStatus = "Locked"
                         result[certName][chapName][chalName] = OrderedDict()
+                        result[certName][chapName][chalName]["_parent"] = chapName
                         result[certName][chapName][chalName]["_status"] = chalStatus
                         result[certName][chapName][chalName]["_link"] = chalLink
                         result[certName][chapName][chalName]["_dateC"] = ""
