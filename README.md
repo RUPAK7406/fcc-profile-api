@@ -24,7 +24,6 @@ chmod ~/fccSpider 755 -R .
 
 ## Usage / Changelog
 
-* In `~/fccSpider`:
 ### 0.2
 * Usage:
 ```
