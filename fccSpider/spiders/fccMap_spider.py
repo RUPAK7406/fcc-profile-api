@@ -16,7 +16,7 @@ class fccMap(scrapy.Spider):
     def parse(self, response):
         # Clear string function
         def clrstr(string):
-            string = str(string).lstrip()
+            string = str(string).lstrip().translate(None, "(.)")
             if string == "None":
                 string = ""
             return string
@@ -40,7 +40,7 @@ class fccMap(scrapy.Spider):
                     if not chapDesc:
                         chapDesc = ""
                     result[certName][chapName] = OrderedDict() #set up empty dictionary under title
-                    result[certName][chapName]["_time"] = chapTime[1:-1]
+                    result[certName][chapName]["_time"] = chapTime
                     result[certName][chapName]["_desc"] = chapDesc
                     for chalIdx, chal in enumerate(chap.css("p.challenge-title")): #list challenges in chapters and loop
                         chalName = clrstr(   chal.css("::text").extract_first() )
