@@ -14,7 +14,7 @@ class fccProfile(scrapy.Spider):
     def parse(self, response):
         # Clear string function
         def clrstr(string):
-            string = str(string).lstrip().translate({ord(char): None for char in "()."})
+            string = str(string).lstrip()
             if string == "None":
                 string = ""
             return string
@@ -34,10 +34,11 @@ class fccProfile(scrapy.Spider):
                 name = clrstr( challenge.css("td.col-xs-12.visible-xs a::text").extract_first() )
                 if name:
                     date = clrstr( challenge.css("td.col-xs-2.hidden-xs::text").extract() )
-                    link = clrstr( challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first() )
+                    link = challenge.css("td.col-xs-12.visible-xs a::attr(href)").extract_first()
                     if len(date) == 1: # if date only contains `completed date`
                         date.append("") # append empty date
                     if "solution=" in link:
+                        link = str(link).split("?",1)[0]
                         code = str(link).split("?",1)[1][9:]
                     else:
                         code = ""
