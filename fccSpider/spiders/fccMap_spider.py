@@ -3,6 +3,7 @@ from collections import OrderedDict
 import json
 import os
 
+
 class fccMap(scrapy.Spider):
     name = "fccMap"
     def __init__(self, username=None, *args, **kwargs):
@@ -19,8 +20,13 @@ class fccMap(scrapy.Spider):
            if string == "None":
                string = ""
            return string
-        # Start scraping
+        # Setup Paths
+        resultpath = os.getcwd() + "/output/fccMap.json"
+        lookuppath = os.getcwd() + "/output/fccMap.lookup.json"
+        # Setup dictionaries
         result = OrderedDict()
+        lookup = OrderedDict()
+        # Start scraping
         self.log("Loop Start")
         for table in response.css("#accordion"):
             # only one table, so no need to find titles. Skip a subsection for dictionary.
@@ -34,7 +40,6 @@ class fccMap(scrapy.Spider):
                     if not chapDesc:
                         chapDesc = ""
                     result[certName][chapName] = OrderedDict() #set up empty dictionary under title
-                    result[certName][chapName]["_parent"] = certName
                     result[certName][chapName]["_time"] = chapTime[1:-1]
                     result[certName][chapName]["_desc"] = chapDesc
                     for chalIdx, chal in enumerate(chap.css("p.challenge-title")): #list challenges in chapters and loop
@@ -47,7 +52,6 @@ class fccMap(scrapy.Spider):
                         if chal.css(".disabled.ion-locked"):
                             chalStatus = "Locked"
                         result[certName][chapName][chalName] = OrderedDict()
-                        result[certName][chapName][chalName]["_parent"] = chapName
                         result[certName][chapName][chalName]["_status"] = chalStatus
                         result[certName][chapName][chalName]["_link"] = chalLink
                         result[certName][chapName][chalName]["_dateC"] = ""
@@ -55,11 +59,14 @@ class fccMap(scrapy.Spider):
                         result[certName][chapName][chalName]["_desc"] = ""
                         result[certName][chapName][chalName]["_req"] = ""
                         result[certName][chapName][chalName]["_code"] = ""
+                        lookup[chalName] = [certName,chapName]
         self.log("Loop End")
-        path = os.getcwd() + "/output/fccMap.json"
-        self.log("Output: "+path)
-        with open(path, "w") as output:
+        self.log("Output: "+resultPath)
+        self.log("Output: "+lookupPath)
+        with open(resultPath, "w") as output:
             json.dump(result, output, indent=2)
+        with open(lookupPath, "w") as output:
+            json.dump(lookup, output, indent=2)
 
 
 # str("%02d"%certIdx) + " " +
