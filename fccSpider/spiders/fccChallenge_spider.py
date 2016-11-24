@@ -16,16 +16,15 @@ class fccChallenge(scrapy.Spider):
             lookup = json.load(output, object_pairs_hook=OrderedDict)
         with open(resultPath) as output:
             result = json.load(output, object_pairs_hook=OrderedDict)
-        # Extract URLs
+        # Setup URLs
         self.start_urls = []
         for name in lookup.keys():
             parent = lookup[name]
             link = result[parent[0]][parent[1]][name]["_link"]
             if link:
+                link = "https://www.freecodecamp.com" + link
                 self.start_urls.append(link)
                 self.log("Added: " + link)
-        # Setup URLs
-        self.start_urls = ["https://www.freecodecamp.com/%s" % username]
 
 
     def parse(self, response):
