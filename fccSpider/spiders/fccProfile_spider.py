@@ -13,6 +13,7 @@ class fccProfile(scrapy.Spider):
 
 
     def parse(self, response):
+        self.log("Scraped: " + response.url)
         # Clear String Function
         def clrstr(string):
             string = str(string).lstrip()
