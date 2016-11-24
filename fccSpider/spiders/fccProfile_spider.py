@@ -8,11 +8,12 @@ class fccProfile(scrapy.Spider):
     name = "profile"
     def __init__(self, username=None, *args, **kwargs):
         super(fccProfile, self).__init__(*args, **kwargs)
+        # Setup URLs
         self.start_urls = ["https://www.freecodecamp.com/%s" % username]
 
 
     def parse(self, response):
-        # Clear string function
+        # Clear String Function
         def clrstr(string):
             string = str(string).lstrip()
             if string == "None":
@@ -22,13 +23,13 @@ class fccProfile(scrapy.Spider):
         resultPath = os.getcwd() + "/output/map.json"
         lookupPath = os.getcwd() + "/output/map.lookup.json"
         failedPath = os.getcwd() + "/output/map.failed.json"
-        # Setup dictionaries
+        # Setup Dictionaries
         with open(resultPath) as output:
             result = json.load(output, object_pairs_hook=OrderedDict)
         with open(lookupPath) as output:
             lookup = json.load(output, object_pairs_hook=OrderedDict)
         failed = OrderedDict()
-        # Start scraping
+        # Start Scraping
         self.log("Loop Start")
         for table in response.css(".table-striped"):
             # Ignore table separation because it is not organized the same way as the map.
@@ -56,6 +57,7 @@ class fccProfile(scrapy.Spider):
                         failed[name]["_code"] = code
                         self.log(name+" ("+date[0]+") no longer exists in FCC's curriculum map")
         self.log("Loop End")
+        # Output to JSON
         self.log("Output: "+resultPath)
         with open(resultPath, "w") as output:
             json.dump(result, output, indent=2)

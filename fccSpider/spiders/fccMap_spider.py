@@ -8,13 +8,14 @@ class fccMap(scrapy.Spider):
     name = "map"
     def __init__(self, username=None, *args, **kwargs):
         super(fccMap, self).__init__(*args, **kwargs)
+        # Setup URLs
         self.start_urls = ["https://www.freecodecamp.com/map"]
         # debug url http://local.htko.ca/map.html
         # production url https://www.freecodecamp.com/map
 
 
     def parse(self, response):
-        # Clear string function
+        # Clear String Function
         def clrstr(string):
             string = str(string).lstrip()
             if string == "None":
@@ -23,10 +24,10 @@ class fccMap(scrapy.Spider):
         # Setup Paths
         resultPath = os.getcwd() + "/output/map.json"
         lookupPath = os.getcwd() + "/output/map.lookup.json"
-        # Setup dictionaries
+        # Setup Dictionaries
         result = OrderedDict()
         lookup = OrderedDict()
-        # Start scraping
+        # Start Scraping
         self.log("Loop Start")
         for table in response.css("#accordion"):
             # only one table, so no need to find titles. Skip a subsection for dictionary.
@@ -61,6 +62,7 @@ class fccMap(scrapy.Spider):
                         result[certName][chapName][chalName]["_code"] = ""
                         lookup[chalName] = [certName,chapName]
         self.log("Loop End")
+        # Output to JSON
         self.log("Output: "+resultPath)
         self.log("Output: "+lookupPath)
         with open(resultPath, "w") as output:
