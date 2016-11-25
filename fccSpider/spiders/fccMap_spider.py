@@ -10,7 +10,7 @@ class fccMap(scrapy.Spider):
         super(fccMap, self).__init__(*args, **kwargs)
         # Setup URLs
         self.start_urls = ["https://www.freecodecamp.com/map"]
-        # debug url http://local.htko.ca/map.html
+        # debug url http://local.htko.ca/sources/map.html
         # production url https://www.freecodecamp.com/map
 
 
