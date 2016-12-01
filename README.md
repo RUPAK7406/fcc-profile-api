@@ -2,7 +2,7 @@
 Built on [Scrapy](https://scrapy.org/) & [Python](https://www.python.org/), this tool converts your Free Code Camp challenge profile, or general map structure into JSON data.
 
 ## Install
-* There are bash scripts in this project, hence it requires linux. You can use it without linux by learning how it works in `fccSpider.sh`.
+* These bash scripts are mostly designed to run in a Linux environment, specifically Python 3 container in Docker 1.10+ running on Ubuntu 16.04.1. Scrapy is yet to support Python 3 in Windows as of today.
 * Install Python 3
 ```
 apt-get update
@@ -18,7 +18,7 @@ cd ~/fccSpider
 ```
 * Set executable permissions:
 ```
-chmod ~/fccSpider 755 -R .
+chmod 755 -R ~/fccSpider
 ```
 * `~/fccSpider` should contain `fccSpider`, `output` folders and `fccSpider.sh`, `scrapy.cfg` files.
 
