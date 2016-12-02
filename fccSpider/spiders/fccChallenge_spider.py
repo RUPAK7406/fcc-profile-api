@@ -31,8 +31,9 @@ class fccChallenge(scrapy.Spider):
         for name in self.lookup.keys():
             parent = self.lookup[name]
             link = self.result[parent[0]][parent[1]][name]["_link"]
-            lookupurl[link] = name
-            if link:
+            status = self.result[parent[0]][parent[1]][name]["_status"]
+            self.lookupurl[link] = name
+            if link and status != "Coming Soon" :
                 link = "https://www.freecodecamp.com" + link
                 self.start_urls.append(link)
 
@@ -58,7 +59,7 @@ class fccChallenge(scrapy.Spider):
         # Start Scraping
         # self.log("Scraping: " + response.url)
         link = response.url[28:]
-        name = lookupurl[link]
+        name = self.lookupurl[link]
         parent = self.lookup[name]
         if response.css(".challenge-instructions").extract_first(): # Standard (0). Parent. Child: p.  Misc: .challenge-instructions-title
             self.result[parent[0]][parent[1]][name]["_desc"] = '/n'.join( response.css(".challenge-instructions p::text").extract() )
