@@ -16,6 +16,7 @@ class fccChallenge(scrapy.Spider):
     result = OrderedDict()
     lookup = OrderedDict()
     failed = OrderedDict()
+    lookupurl = OrderedDict()
 
     def __init__(self, username=None, *args, **kwargs):
         # Init
@@ -30,6 +31,7 @@ class fccChallenge(scrapy.Spider):
         for name in self.lookup.keys():
             parent = self.lookup[name]
             link = self.result[parent[0]][parent[1]][name]["_link"]
+            lookupurl[link] = name
             if link:
                 link = "https://www.freecodecamp.com" + link
                 self.start_urls.append(link)
@@ -55,17 +57,20 @@ class fccChallenge(scrapy.Spider):
     def parse(self, response):
         # Start Scraping
         # self.log("Scraping: " + response.url)
+        link = response.url[28:]
+        name = lookupurl[link]
+        parent = self.lookup[name]
         if response.css(".challenge-instructions").extract_first(): # Standard (0). Parent. Child: p.  Misc: .challenge-instructions-title
-            desc = '/n'.join( response.css(".challenge-instructions p::text").extract() )
+            self.result[parent[0]][parent[1]][name]["_desc"] = '/n'.join( response.css(".challenge-instructions p::text").extract() )
             self.log("Type 0")
         elif response.css(".step-text").extract_first(): # Project (3). Child. misc: .challenge-instructions-title
-            desc = '/n'.join( response.css(".step-text::text").extract() )
+            self.result[parent[0]][parent[1]][name]["_desc"] ='/n'.join( response.css(".step-text::text").extract() )
             self.log("Type 3")
         elif response.css(".challenge-step-description").extract_first(): # Full Page (7). Child. Misc: .challenge-step .challenge-step-counter
-            desc = '/n'.join( response.css(".challenge-step-description::text").extract() )
+            self.result[parent[0]][parent[1]][name]["_desc"] = '/n'.join( response.css(".challenge-step-description::text").extract() )
             self.log("Type 7")
         elif response.css("article").extract_first(): # Video (99). Parent. Child: p. Misc:
-            desc = '/n'.join( response.css("article p::text").extract() )
+            self.result[parent[0]][parent[1]][name]["_desc"] = '/n'.join( response.css("article p::text").extract() )
             self.log("Type 99")
         else:
             self.log("Invalid Type: " + response.url)
