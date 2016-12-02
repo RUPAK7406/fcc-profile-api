@@ -62,17 +62,13 @@ class fccChallenge(scrapy.Spider):
         name = self.lookupurl[link]
         parent = self.lookup[name]
         if response.css(".challenge-instructions").extract_first(): # Standard (0). Parent. Child: p.  Misc: .challenge-instructions-title
-            self.result[parent[0]][parent[1]][name]["_desc"] = '/n'.join( response.css(".challenge-instructions p::text").extract() )
-            self.log("Type 0")
+            self.result[parent[0]][parent[1]][name]["_desc"] = "/n".join( response.css(".challenge-instructions p::text").extract() )
         elif response.css(".step-text").extract_first(): # Project (3). Child. misc: .challenge-instructions-title
-            self.result[parent[0]][parent[1]][name]["_desc"] ='/n'.join( response.css(".step-text::text").extract() )
-            self.log("Type 3")
+            self.result[parent[0]][parent[1]][name]["_desc"] = "/n".join( response.css(".step-text::text").extract() )
         elif response.css(".challenge-step-description").extract_first(): # Full Page (7). Child. Misc: .challenge-step .challenge-step-counter
-            self.result[parent[0]][parent[1]][name]["_desc"] = '/n'.join( response.css(".challenge-step-description::text").extract() )
-            self.log("Type 7")
+            self.result[parent[0]][parent[1]][name]["_desc"] = "/n".join( response.css(".challenge-step-description::text").extract() )
         elif response.css("article").extract_first(): # Video (99). Parent. Child: p. Misc:
-            self.result[parent[0]][parent[1]][name]["_desc"] = '/n'.join( response.css("article p::text").extract() )
-            self.log("Type 99")
+            self.result[parent[0]][parent[1]][name]["_desc"] = "/n".join( response.css("article p::text").extract() )
         else:
-            self.log("Invalid Type: " + response.url)
+            self.result[parent[0]][parent[1]][name]["_desc"] = "Invalid type."
         # self.log("Scraped: " + response.url)
