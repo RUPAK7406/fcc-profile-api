@@ -3,7 +3,6 @@ from collections import OrderedDict
 import json
 import os
 
-
 class fccChallenge(scrapy.Spider):
 
     # Init
@@ -61,14 +60,20 @@ class fccChallenge(scrapy.Spider):
         link = response.url[28:]
         name = self.lookupurl[link]
         parent = self.lookup[name]
+        text = ""
         if response.css(".challenge-instructions").extract_first(): # Standard (0). Parent. Child: p.  Misc: .challenge-instructions-title
-            self.result[parent[0]][parent[1]][name]["_desc"] = "/n".join( response.css(".challenge-instructions p::text").extract() )
+            for tag in response.css(".challenge-instructions p"):
+                text = text + "".join( tag.css("::text").extract() ) + "\n"
         elif response.css(".step-text").extract_first(): # Project (3). Child. misc: .challenge-instructions-title
-            self.result[parent[0]][parent[1]][name]["_desc"] = "/n".join( response.css(".step-text::text").extract() )
+            for tag in response.css(".step-text"):
+                text = text + "".join( tag.css("::text").extract() ) + "\n"
         elif response.css(".challenge-step-description").extract_first(): # Full Page (7). Child. Misc: .challenge-step .challenge-step-counter
-            self.result[parent[0]][parent[1]][name]["_desc"] = "/n".join( response.css(".challenge-step-description::text").extract() )
+            for tag in response.css(".challenge-step-description"):
+                text = text + "".join( tag.css("::text").extract() ) + "\n"
         elif response.css("article").extract_first(): # Video (99). Parent. Child: p. Misc:
-            self.result[parent[0]][parent[1]][name]["_desc"] = "/n".join( response.css("article p::text").extract() )
+            for tag in response.css("article p"):
+                text = text + "".join( tag.css("::text").extract() ) + "\n"
         else:
-            self.result[parent[0]][parent[1]][name]["_desc"] = "Invalid type."
+            text = "Invalid type."
+        self.result[parent[0]][parent[1]][name]["_desc"] = self.clrstr( text )
         # self.log("Scraped: " + response.url)
