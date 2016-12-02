@@ -32,7 +32,7 @@ class fccProfile(scrapy.Spider):
         # Init
         self.log("Stop Reason: " + reason)
         # Save Files
-        self.log("Output: "+self.resultPath)
+        self.log("Output: " + self.resultPath)
         with open(self.resultPath, "w") as output:
             json.dump(self.result, output, indent=2)
         with open(self.failedPath, "w") as output:
@@ -60,7 +60,7 @@ class fccProfile(scrapy.Spider):
                     if "?solution=" in link:
                         code = link.split("?",1)[1][9:]
                     else:
-                        code = ""
+                        code = link
                     if name in self.lookup.keys(): # Add to database if challenge name is still in lookup (still exists on FCC)
                         parent = self.lookup[name]
                         self.result[parent[0]][parent[1]][name]["_status"] = "Complete"
@@ -73,5 +73,5 @@ class fccProfile(scrapy.Spider):
                         self.failed[name]["_dateC"] = self.clrstr(date[0])
                         self.failed[name]["_dateU"] = self.clrstr(date[1])
                         self.failed[name]["_code"] = code
-                        self.log(name+" ("+date[0]+") no longer exists in FCC's curriculum map")
+                        self.log("Deprecated: (" + date[0] + ") " + name)
         self.log("Scraped: " + response.url)
