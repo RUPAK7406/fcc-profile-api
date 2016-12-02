@@ -19,6 +19,7 @@
     find . -name "*.pyc" -type f -delete # clear compiled / cache python files for clean operation
     scrapy crawl map -a username=$1
     scrapy crawl profile -a username=$1
+    scrapy crawl challenge -a username=$1
     find . -name "*.pyc" -type f -delete
     set +x # echo off
   else

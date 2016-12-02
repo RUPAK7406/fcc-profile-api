@@ -33,16 +33,15 @@ class fccChallenge(scrapy.Spider):
             if link:
                 link = "https://www.freecodecamp.com" + link
                 self.start_urls.append(link)
-                self.log("Added: " + link)
 
     def closed(self, reason):
         # Init
         self.log("Stop Reason: " + reason)
         # Save Files
-        # self.log("Output: " + self.resultPath)
+        self.log("Output: " + self.resultPath)
         # self.log("Output: " + self.lookupPath)
-        # with open(self.resultPath, "w") as output:
-        #     json.dump(self.result, output, indent=2)
+        with open(self.resultPath, "w") as output:
+            json.dump(self.result, output, indent=2)
         # with open(self.lookupPath, "w") as output:
         #     json.dump(self.lookup, output, indent=2)
 
@@ -55,6 +54,19 @@ class fccChallenge(scrapy.Spider):
 
     def parse(self, response):
         # Start Scraping
-        self.log("Scraping: " + response.url)
-        # Content
-        self.log("Scraped: " + response.url)
+        # self.log("Scraping: " + response.url)
+        if response.css(".challenge-instructions").extract_first(): # Standard (0). Parent. Child: p.  Misc: .challenge-instructions-title
+            desc = '/n'.join( response.css(".challenge-instructions p::text").extract() )
+            self.log("Type 0")
+        elif response.css(".step-text").extract_first(): # Project (3). Child. misc: .challenge-instructions-title
+            desc = '/n'.join( response.css(".step-text::text").extract() )
+            self.log("Type 3")
+        elif response.css(".challenge-step-description").extract_first(): # Full Page (7). Child. Misc: .challenge-step .challenge-step-counter
+            desc = '/n'.join( response.css(".challenge-step-description::text").extract() )
+            self.log("Type 7")
+        elif response.css("article").extract_first(): # Video (99). Parent. Child: p. Misc:
+            desc = '/n'.join( response.css("article p::text").extract() )
+            self.log("Type 99")
+        else:
+            self.log("Invalid Type: " + response.url)
+        # self.log("Scraped: " + response.url)
