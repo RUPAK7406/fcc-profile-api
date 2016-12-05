@@ -22,6 +22,7 @@ chmod 755 -R ~/fccSpider
 /fccSpider
 /common
 /export
+/template
 fccSpider.sh
 scrapy.cfg
 readme.md
