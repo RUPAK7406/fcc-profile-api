@@ -53,13 +53,13 @@ clrExport () {
     set +x # echo off
   else
     echo "+ Application Comments:"
-    echo "+ Usage   : ./fccSpider.sh [username] [action]"
-    echo "+ Example : ./fccSpider.sh htko89 full"
-    echo "+ Actions : See below."
-    echo "++ full : Download FCC curriculum map & challenge descriptions, personal profile, export results"
-    echo "++ map : Download FCC curriculum map & challenge descriptions."
-    echo "++ profile : Download & export personal profile. Map must be downloaded or error will error."
-    echo "++ empty  : Download & export empty profile. Map must be downloaded or error will error."
-    echo "++ clear  : Deletes all maps and exports."
+    echo "+  Usage    : ./fccSpider.sh [username] [action]"
+    echo "+  Example  : ./fccSpider.sh htko89 full"
+    echo "+  Actions  : See below."
+    echo "++  full    - Download FCC curriculum map & challenge descriptions, personal profile, export results"
+    echo "++  map     - Download FCC curriculum map & challenge descriptions."
+    echo "++  profile - Download & export personal profile. Map must be downloaded or error will error."
+    echo "++  empty   - Download & export empty profile. Map must be downloaded or error will error."
+    echo "++  clear   - Deletes all maps and exports."
   fi
   echo

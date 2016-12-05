@@ -29,41 +29,18 @@ readme.md
 
 ## Usage / Changelog
 
-### 0.3
+### 0.4
 * Usage:
 ```
 + Application Comments:
-+ Usage   : ./fccSpider.sh [username] [action]
-+ Example : ./fccSpider.sh htko89 full
-+ Actions : See below.
-++ full : Downloads the FCC curriculum map, challenge descriptions, personal completion profile, export results
-++ scrape : Downloads the FCC curriculum map, challenge descriptions, personal completion profile
-++ empty  : Downloads the FCC curriculum map, challenge descriptions.
-++ export : Exports existing results to export folder. Scrape must have run at least once before or errors will occur
++  Usage    : ./fccSpider.sh [username] [action]
++  Example  : ./fccSpider.sh htko89 full
++  Actions  : See below.
+++  full    - Download FCC curriculum map & challenge descriptions, personal profile, export results
+++  map     - Download FCC curriculum map & challenge descriptions.
+++  profile - Download & export personal profile. Map must be downloaded or error will error.
+++  empty   - Download & export empty profile. Map must be downloaded or error will error.
+++  clear   - Deletes all maps and exports.
 ```
 * Working data output to `/common`. Export data output to `/export`.
 * Challenge solution code in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
-
-### 0.2
-* Usage:
-```
-cd ~/fccSpider
-./fccSpider.sh [username]
-Example: ./fccSpider.sh myfccusername
-```
-* Data output to `map.json` and `map.failed.json` in `~/fccSpider/output/`. Make sure files in this folder are backed up, as they are wiped per execution.
-* Challenge solution code in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
-
-### 0.1
-* Usage:
-```
-cd ~/fccSpider
-./fccSpider.sh [username] [spiderName]
-Example: ./fccSpider.sh myfccusername fccProfile
-```
-* Available spiders:
-```
-fccProfile, fccMap (WIP)
-```
-* Data output to `[spiderName].json` in `~/fccSpider/output/`.
-* Challenge solutions code in URL encoding.
