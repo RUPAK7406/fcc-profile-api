@@ -12,13 +12,11 @@ class fccDesc(scrapy.Spider):
     commonDir = curDir + "/common"
     exportDir = curDir + "/export"
     # Setup File Paths
-    resultPath = commonDir + "/result.json"
-    failedPath = commonDir + "/failed.json"
+    resultPath = commonDir + "/empty.json"
     nameDictPath = commonDir + "/nameDict.json"
     linkDictPath = commonDir + "/linkDict.json"
     # Setup Dictionaries
     result = OrderedDict()
-    failed = OrderedDict()
     nameDict = OrderedDict()
     linkDict = OrderedDict()
 

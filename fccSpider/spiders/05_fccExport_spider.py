@@ -3,6 +3,7 @@ from collections import OrderedDict
 import json
 import os
 from string import Template
+from urllib import parse
 
 class fccExport(scrapy.Spider):
 
@@ -11,16 +12,19 @@ class fccExport(scrapy.Spider):
     # Setup Folder Paths
     curDir = os.getcwd()
     commonDir = curDir + "/common"
+    templateDir = curDir + "/template"
     exportDir = curDir + "/export"
     # Setup File Paths
     resultPath = commonDir + "/result.json"
-    failedPath = commonDir + "/failed.json"
     nameDictPath = commonDir + "/nameDict.json"
     linkDictPath = commonDir + "/linkDict.json"
-    templatePath = commonDir + "/template.md"
+    # Setup Export
+    exportPath = exportDir + "/result.json"
+    readmePath = templateDir + "/readme.md"
+    chapterPath = templateDir + "/chapter.md"
+    challengePath = templateDir + "/challenge.md"
     # Setup Dictionaries
     result = OrderedDict()
-    failed = OrderedDict()
     nameDict = OrderedDict()
     linkDict = OrderedDict()
     templateFile = None
@@ -31,13 +35,19 @@ class fccExport(scrapy.Spider):
         # Load Files
         with open(self.resultPath) as output:
             self.result = json.load(output, object_pairs_hook=OrderedDict)
-        self.templateFile = Template( open(self.templatePath).read() )
+        self.readmeFile = Template( open(self.readmePath).read() )
+        self.chapterFile = Template( open(self.chapterPath).read() )
+        self.challengeFile = Template( open(self.challengePath).read() )
         # Setup URLs
         self.start_urls = ["https://www.freecodecamp.com/%s" % username]
 
     def closed(self, reason):
         # Init
         self.log("Stop Reason: " + reason)
+        # Save Files
+        with open(self.exportPath, "w") as output:
+            self.log("Output: " + self.exportPath)
+            json.dump(self.result, output, indent=2)
 
     def clrstr(self, string):
         # Clear String Function
@@ -64,9 +74,19 @@ class fccExport(scrapy.Spider):
                 # Variables
                 chapTime = self.result[certName][chapName]["_time"]
                 chapDesc = self.result[certName][chapName]["_desc"]
+                chapData = {
+                    "chapIndex": chapIndex,
+                    "chapName": chapName,
+                    "chapTime": chapTime,
+                    "chapDesc": chapDesc,
+                }
+                # Substitute Data
+                chapTemplate = str( self.chapterFile.safe_substitute(chapData) )
                 # Setup Path
                 chapDir = "/" + str(chapIndex).zfill(2) + " - " + chapName + " (" + chapTime + ")"
                 chapPath = certPath + chapDir
+                chapFile = "/readme.md"
+                chapFilePath = chapPath + chapFile
                 chapIndex = chapIndex + 1
                 chalIndex = 0
                 # Make Path
@@ -74,25 +94,34 @@ class fccExport(scrapy.Spider):
                     os.stat(chapPath)
                 except:
                     os.mkdir(chapPath)
+                with open(chapFilePath, "w") as output:
+                    self.log("Output: " + chapFilePath)
+                    output.write( chapTemplate )
                 for chalName, chal in chap.items():
                     if not chalName[0] == "_":
                         # Variables
+                        chalCode = self.result[certName][chapName][chalName]["_code"]
+                        if self.result[certName][chapName][chalName]["_codeType"] == "code":
+                            chalCode = parse.unquote( chalCode )
                         chalData = {
-                            "chapDesc": chapDesc,
                             "chalIndex": chalIndex,
                             "chalName": chalName,
                             "chalStatus": self.result[certName][chapName][chalName]["_status"],
                             "chalDateC": self.result[certName][chapName][chalName]["_dateC"],
                             "chalDateU": self.result[certName][chapName][chalName]["_dateU"],
                             "chalDesc": self.result[certName][chapName][chalName]["_desc"],
-                            "chalCode": self.result[certName][chapName][chalName]["_code"],
+                            "chalCode": chalCode,
                         }
                         # Substitute Data
-                        chalTemplate = str( self.templateFile.safe_substitute(chalData) )
+                        chalTemplate = str( self.challengeFile.safe_substitute(chalData) )
                         # Setup Path
                         chalFile = "/" + str(chalIndex).zfill(2) + " - " + chalName + ".md"
-                        chalPath = chapPath + chalFile
+                        chalFilePath = chapPath + chalFile
                         chalIndex = chalIndex + 1
                         # Make Path
-                        with open(chalPath, "w") as output:
+                        with open(chalFilePath, "w") as output:
+                            self.log("Output: " + chalFilePath)
+                            output.write( chalTemplate )
+                        with open(chapFilePath, "a") as output:
+                            self.log("Append: " + chapFilePath)
                             output.write( chalTemplate )

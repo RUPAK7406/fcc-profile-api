@@ -12,13 +12,11 @@ class fccMap(scrapy.Spider):
     commonDir = curDir + "/common"
     exportDir = curDir + "/export"
     # Setup File Paths
-    resultPath = commonDir + "/result.json"
-    failedPath = commonDir + "/failed.json"
+    resultPath = commonDir + "/empty.json"
     nameDictPath = commonDir + "/nameDict.json"
     linkDictPath = commonDir + "/linkDict.json"
     # Setup Dictionaries
     result = OrderedDict()
-    failed = OrderedDict()
     nameDict = OrderedDict()
     linkDict = OrderedDict()
 
@@ -84,7 +82,7 @@ class fccMap(scrapy.Spider):
                         self.result[certName][chapName][chalName]["_dateC"] = ""
                         self.result[certName][chapName][chalName]["_dateU"] = ""
                         self.result[certName][chapName][chalName]["_desc"] = ""
-                        self.result[certName][chapName][chalName]["_req"] = ""
+                        self.result[certName][chapName][chalName]["_codeType"] = ""
                         self.result[certName][chapName][chalName]["_code"] = ""
                         self.nameDict[chalName] = [certName,chapName]
                         self.linkDict[chalLink] = [certName,chapName,chalName]
