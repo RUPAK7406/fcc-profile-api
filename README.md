@@ -9,7 +9,7 @@ apt-get update
 apt-get install python-pip
 apt-get install build-essential libssl-dev libffi-dev python-dev
 pip install cryptography
-pip install Scrapy
+pip install scrapy
 ```
 * Extract [latest version](https://github.com/htko89/FCC-Spider/releases) into a directory, say `~/fccSpider`, and enter it.
 * Set executable permissions:
