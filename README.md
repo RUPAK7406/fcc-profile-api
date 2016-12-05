@@ -39,8 +39,8 @@ readme.md
 +  Actions  : See below.
 ++  full    - Download FCC curriculum map & challenge descriptions, personal profile, export results
 ++  map     - Download FCC curriculum map & challenge descriptions.
-++  profile - Download & export personal profile. Map must be downloaded or error will error.
-++  empty   - Download & export empty profile. Map must be downloaded or error will error.
+++  profile - Download & export personal profile. Map must be downloaded or error will occur.
+++  empty   - Download & export empty profile. Map must be downloaded or error will occur.
 ++  clear   - Deletes all maps and exports.
 ```
 * Working data output to `/common`. Export data output to `/export`.
