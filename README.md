@@ -3,7 +3,7 @@ Built on [Scrapy](https://scrapy.org/) & [Python](https://www.python.org/), this
 
 ## Install
 * These bash scripts are mostly designed to run in a Linux environment, specifically Python 3 container in Docker 1.10+ running on Ubuntu 16.04.1. Scrapy is yet to support Python 3 in Windows as of today.
-* Install Python 3, ScraPy's dependencies and Scrapy itself.
+* Install Python 3, Scrapy's dependencies and Scrapy itself.
 ```
 apt-get update
 apt-get install python-pip
@@ -41,7 +41,7 @@ readme.md
 ++ empty  : Downloads the FCC curriculum map, challenge descriptions.
 ++ export : Exports existing results to export folder. Scrape must have run at least once before or errors will occur
 ```
-* Working data output to /common. Export data output to /export.
+* Working data output to `/common`. Export data output to `/export`.
 * Challenge solution code in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
 
 ### 0.2
