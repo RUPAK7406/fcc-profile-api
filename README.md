@@ -30,7 +30,7 @@ readme.md
 
 ## Usage / Changelog
 
-### 0.4
+### 0.4.1
 * Usage:
 ```
 + Application Comments:
