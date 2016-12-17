@@ -6,26 +6,14 @@ Built on [Scrapy](https://scrapy.org/) & [Python](https://www.python.org/), this
 * Install Python 3, Scrapy's dependencies and Scrapy itself.
 ```
 apt-get update
-apt-get install python-pip
-apt-get install build-essential libssl-dev libffi-dev python-dev
-pip install cryptography
-pip install scrapy
+apt-get install python-pip build-essential libssl-dev libffi-dev python-dev
+pip install cryptography scrapy
 ```
 * Extract [latest version](https://github.com/htko89/FCC-Spider/releases) into a directory, say `~/fccSpider`, and enter it.
 * Set executable permissions:
 ```
 cd ~/fccSpider
 chmod 755 -R ~/fccSpider
-```
-* `~/fccSpider` should contain:
-```
-/fccSpider
-/common
-/export
-/template
-fccSpider.sh
-scrapy.cfg
-readme.md
 ```
 
 ## Usage / Changelog
