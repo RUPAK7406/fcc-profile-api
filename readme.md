@@ -1,7 +1,28 @@
-# FCC Spider
+---
+type: "folio"
+draft: false
+date: "2016-11-24"
+title: "FCC Spider"
+parent: "personal"
+topics:
+  - "code"
+tools:
+  - "personal"
+  - "scrapy"
+  - "python"
+  - "spider"
+  - "json"
+  - "markdown"
+cover: "cover.png"
+photo:
+  - "mockup-mobile.png"
+link: "https://github.com/htko89/fcc-spider"
+version: "0.4.1"
+---
+# Personal Project
 Built on [Scrapy](https://scrapy.org/) & [Python](https://www.python.org/), this tool converts your Free Code Camp challenge profile into JSON data
 
-## Install
+## Project Install:
 * These bash scripts are mostly designed to run in a Linux environment, specifically Python 3 container in Docker 1.10+ running on Ubuntu 16.04.1. Scrapy is yet to support Python 3 in Windows.
 * Install Python 3, Scrapy's dependencies and Scrapy itself.
 ```
@@ -16,9 +37,7 @@ cd ~/fccSpider
 chmod 755 -R ~/fccSpider
 ```
 
-## Usage / Changelog
-
-### 0.4.1
+## Project Usage:
 * Usage:
 ```
 + Application Comments:
