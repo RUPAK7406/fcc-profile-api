@@ -3,11 +3,10 @@ type: "folio"
 draft: false
 date: "2016-11-24"
 title: "FCC Spider"
-parent: "personal"
+parent: "fcc"
 topics:
   - "code"
 tools:
-  - "personal"
   - "scrapy"
   - "python"
   - "spider"
