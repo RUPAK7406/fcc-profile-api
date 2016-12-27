@@ -13,9 +13,6 @@ tools:
   - "spider"
   - "json"
   - "markdown"
-cover: "cover.png"
-photo:
-  - "mockup-mobile.png"
 link: "https://github.com/htko89/fcc-spider"
 version: "0.4.1"
 ---
