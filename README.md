@@ -9,7 +9,6 @@ topics:
 tools:
   - "scrapy"
   - "python"
-  - "spider"
   - "json"
   - "markdown"
 link: "https://github.com/htko89/fcc-spider"
