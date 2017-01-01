@@ -11,7 +11,10 @@ tools:
   - "python"
   - "json"
   - "markdown"
-link: "https://github.com/htko89/fcc-spider"
+cover: "cover.jpg"
+photo:
+  - "cover.jpg"
+code: "https://github.com/htko89/fcc-spider"
 version: "0.4.1"
 ---
 # Personal Project
