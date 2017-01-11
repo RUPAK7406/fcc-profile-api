@@ -1,0 +1,19 @@
+{
+  "name": "fcc-spider",
+  "version": "0.5.0",
+  "main": "index.js",
+  "author": "Tony Ko",
+  "license": "MIT",
+  "repository": "https://github.com/htko89/fcc-spider",
+  "devDependencies": {
+    "cheerio": "^0.22.0",
+    "express": "^4.14.0",
+    "request": "^2.79.0"
+  },
+  "scripts": {
+    "test": "node index.js"
+  },
+  "dependencies": {
+    "devtool": "^2.3.0"
+  }
+}
