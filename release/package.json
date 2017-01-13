@@ -1,20 +1,22 @@
 {
   "name": "fcc-spider",
   "version": "0.5.0",
-  "main": "index.js",
+  "main": "full.js",
   "author": "Tony Ko",
   "license": "MIT",
   "repository": "https://github.com/htko89/fcc-spider",
   "devDependencies": {
     "cheerio": "^0.22.0",
     "express": "^4.14.0",
+    "helmet": "^3.3.0",
     "jsonfile": "^2.4.0",
     "request": "^2.79.0"
   },
   "scripts": {
-    "map": "node app.js map",
-    "profile": "node app.js profile htko89",
-    "full": "node app.js full htko89"
+    "map": "node full.js map",
+    "profile": "node full.js profile htko89",
+    "full": "node full.js full htko89",
+    "server": "node server.js"
   },
   "dependencies": {
     "devtool": "^2.3.0"
