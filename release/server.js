@@ -1,3 +1,4 @@
+// use strict code
 "use strict";
 
 // global node modules
@@ -9,10 +10,11 @@ var app = express();
 app.use(helmet());
 
 // map functions
-function scrape(baseUrl, user, callback) {
+function mapScrape(baseUrl, user, callback) {
+  var url = baseUrl + "map";
+  console.info("[Map Scrape]", "Start", url);
   var data = {};
   var map = {};
-  var url = baseUrl + "map";
   var toDate = function(str) {
     var arr = str.split(" ");
     var date = new Date(0);
@@ -35,7 +37,7 @@ function scrape(baseUrl, user, callback) {
       console.error("[Error]", err);
       callback(err, null);
     } else {
-      console.info("[Map Scrape]", "Start", url);
+      console.info("[Map Process]", "Request", url);
       var $ = cheerio.load(html);
       $("#accordion").each(function() { // loop > all tables
         // start certification loop
@@ -78,7 +80,7 @@ function scrape(baseUrl, user, callback) {
           });
         });
       });
-      console.info("[Map Scrape]", "Complete", url);
+      console.info("[Map Process]", "Complete", url);
       if (user) {
         profileScrape(baseUrl, user, data, map, callback);
       }
@@ -89,6 +91,7 @@ function scrape(baseUrl, user, callback) {
 // profile function
 function profileScrape(baseUrl, user, data, map, callback) {
   var url = baseUrl + user;
+  console.info("[Profile Scrape]", "Request", url);
   request(url, function(error, response, html) {
     if (error) {
       var err = {
@@ -99,7 +102,7 @@ function profileScrape(baseUrl, user, data, map, callback) {
       console.error("[Error]", err);
       callback(err, null);
     } else {
-      console.info("[Profile Scrape]", "Start", url);
+      console.info("[Profile Process]", "Start", url);
       var $ = cheerio.load(html);
       data["Deprecated"] = {};
       $("table.table").each(function() { // loop > all tables
@@ -138,17 +141,21 @@ function profileScrape(baseUrl, user, data, map, callback) {
           }
         });
       });
-      console.info("[Profile Scrape]", "Complete", url);
+      console.info("[Profile Process]", "Complete", url);
       callback(null, data);
     }
   });
 }
 
+// main logic
+var time = new Date();
+var port = 8080;
+
 app.get("/", function(req, res) {
-  scrape("https://www.freecodecamp.com/", "htko89", function(err, data) {
+  mapScrape("https://www.freecodecamp.com/", "htko89", function(err, data) {
     if (err) {
       res.status(500).jsonp({
-        "_errors": err
+        "Errors": err
       });
     } else {
       res.status(200).jsonp(data);
@@ -156,6 +163,6 @@ app.get("/", function(req, res) {
   });
 });
 
-app.listen(3000, function() {
-  console.log("Example app listening on port 3000!");
+app.listen(port, function() {
+  console.info("[FCC-Profile-API]", "Server initialized at port " + port);
 });
