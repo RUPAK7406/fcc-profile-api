@@ -11,7 +11,7 @@ tools:
   - "express.js"
   - "cheerio"
   - "request"
-  - "json"
+  - "rest API"
 cover: "cover.jpg"
 photo:
   - "cover.jpg"
