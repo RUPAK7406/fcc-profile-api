@@ -1,52 +1,91 @@
 ---
 type: "folio"
 draft: false
-date: "2016-11-24"
-title: "FCC Spider"
+date: "2017-01-14"
+title: "fcc-profile-api"
 parent: "fcc"
 topics:
   - "code"
 tools:
-  - "scrapy"
-  - "python"
+  - "node.js"
+  - "express.js"
+  - "cheerio"
+  - "request"
   - "json"
-  - "markdown"
 cover: "cover.jpg"
 photo:
   - "cover.jpg"
-code: "https://github.com/htko89/fcc-spider"
-version: "0.4.1"
+code: "https://github.com/htko89/fcc-profile-api"
 ---
 # Personal Project
-Built on [Scrapy](https://scrapy.org/) & [Python](https://www.python.org/), this tool converts your Free Code Camp challenge profile into JSON data
+Built with Node, Express, Cheerio, and Request, this tool allows you to access the FreeCodeCamp challenge map and your profile via `json` or `jsonp` callbacks.
 
-## Project Install:
-* These bash scripts are mostly designed to run in a Linux environment, specifically Python 3 container in Docker 1.10+ running on Ubuntu 16.04.1. Scrapy is yet to support Python 3 in Windows.
-* Install Python 3, Scrapy's dependencies and Scrapy itself.
+## Server Install:
+* Do the following in a system with node & npm v6.9.4 :
 ```
-apt-get update
-apt-get install python-pip build-essential libssl-dev libffi-dev python-dev
-pip install cryptography scrapy
-```
-* Extract [latest version](https://github.com/htko89/FCC-Spider/releases) into a directory, say `~/fccSpider`, and enter it.
-* Set executable permissions:
-```
-cd ~/fccSpider
-chmod 755 -R ~/fccSpider
+git clone https://github.com/htko89/fcc-profile-api.git
+cd fcc-profile-api/release
+npm install
+node server.js
 ```
 
-## Project Usage:
-* Usage:
+## Server Usage:
+* Your installed api server is available at: http://localhost:8080/
+* **I also host a server for public use** (be fair!) at: http://fcc-profile-api.htko.ca/
+* **JSONP url**: http://fcc-profile-api.htko.ca/?username=your_username&callback=
+* **JSON url**: http://fcc-profile-api.htko.ca/?username=your_username
+* Username and callback are both optional: http://fcc-profile-api.htko.ca/
+
+## Data Usage
+* **HINT**: Don't specify a username to see how the curriculum map is organized. (use a linter)
+* Data returned are nested objects: Certification > Chapter > Challenge.
+* Older challenges that have been removed from the FreeCodeCamp curriculum is under `Deprecated` key.
+
+### Example shortened output (HTTP code 200).
+```json
+{
+  "Front End Development Certification": {
+    "HTML5 and CSS": {
+      "_time": "1969-12-31T10:00:00.000Z",
+      "Inform with the Paragraph Element" : {
+        "_link" : "https://www.freecodecamp.com/challenges/inform-with-the-paragraph-element",
+        "_dateC" : "May 21, 2016",
+        "_dateU" : "May 22, 2016",
+        "_code" : "https://www.freecodecamp.com//challenges/Inform with the Paragraph Element?solution=%0A%3Ch1%3EHello%20World%3C%2Fh1%3E%0A%3Ch2%3ECatPhotoApp%3C%2Fh2%3E%0A%3Cp%3EHello%20Paragraph%3C%2Fp%3E%0A"
+      }
+    }
+  },
+  "Data Visualization Certification": {
+		"Sass": {
+			"_time": "1969-12-31T10:00:00.000Z",
+			"Learn Sass Challenges": {
+				"_status": "Coming Soon"
+			}
+		}
+  },
+  "Coding Interview Preparation": {
+		"Coding Interview Training": {
+			"_time": "1970-01-03T03:00:00.000Z",
+			"_desc": "To qualify for this coding interview training, you must first earn all four certifications: Front End, Data Visualization, Back End, and Full Stack",
+			"Soft Skill Training": {},
+			"Critical Thinking Training": {},
+			"Whiteboard Coding Training": {}
+		}
+  },
+  "Deprecated": {
+  	"Add Alt Text to an Image for Accessibility": {
+  		"_dateC": "May 21, 2016",
+  		"_code": "https://www.freecodecamp.com//challenges/Add Alt Text to an Image for Accessibility?solution=..."
+  	}
+  }
+}
 ```
-+ Application Comments:
-+  Usage    : ./fccSpider.sh [username] [action]
-+  Example  : ./fccSpider.sh htko89 full
-+  Actions  : See below.
-++  full    - Download FCC curriculum map & challenge descriptions, personal profile, export results
-++  map     - Download FCC curriculum map & challenge descriptions.
-++  profile - Download & export personal profile. Map must be downloaded or error will occur.
-++  empty   - Download & export empty profile. Map must be downloaded or error will occur.
-++  clear   - Deletes all maps and exports.
+### Example error output (HTTP code 500).
+```json
+{
+  Errors: {
+    _message: "Cannot request freeCodeCamp map"
+    _error: {...}
+  }
+}
 ```
-* Working data output to `/common`. Export data output to `/export`.
-* Challenge solution code in URL encoding. Decoder: [Here](http://meyerweb.com/eric/tools/dencoder/).
