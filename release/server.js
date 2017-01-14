@@ -1,18 +1,18 @@
+"use strict";
+
 // global node modules
-var fs       = require("fs");
-var request  = require("request");
-var cheerio  = require("cheerio");
-var jsonfile = require("jsonfile");
-var helmet   = require('helmet');
-var express  = require('express');
-var app      = express();
+var request = require("request");
+var cheerio = require("cheerio");
+var helmet = require("helmet");
+var express = require("express");
+var app = express();
 app.use(helmet());
 
 // map functions
-function mapScrape(baseUrl, user) {
-  var mapObj = {};
-  var keyObj = {};
-  url = baseUrl + "map";
+function scrape(baseUrl, user, callback) {
+  var data = {};
+  var map = {};
+  var url = baseUrl + "map";
   var toDate = function(str) {
     var arr = str.split(" ");
     var date = new Date(0);
@@ -21,15 +21,19 @@ function mapScrape(baseUrl, user) {
     } else if (arr[1].includes("minute")) {
       date.setMinutes(arr[0]);
     } else {
-      console.error("[Map Date Error]", str);
-      terminate();
+      date = null;
     }
     return date;
   };
   request(url, function(error, response, html) {
     if (error) {
-      console.error("[Map Req Error]", url, error);
-      terminate();
+      var err = {
+        "_message": "Cannot request freeCodeCamp map",
+        "_url": url,
+        "_error": error
+      };
+      console.error("[Error]", err);
+      callback(err, null);
     } else {
       console.info("[Map Scrape]", "Start", url);
       var $ = cheerio.load(html);
@@ -37,16 +41,16 @@ function mapScrape(baseUrl, user) {
         // start certification loop
         $(this).find("div.certBlock").each(function() { // loop > all cert blocks
           var certName = $(this).prev().find("a").text().trim(); // get name in preceding tag
-          mapObj[certName] = {}; // init object
+          data[certName] = {}; // init object
           // start chapter loop
           $(this).find("div.chapterBlock").each(function() { // get all chapblock objects
             var chapName = $(this).prev().find("a").text().trim(); // get name in preceding tag
             var chapTime = $(this).prev().find(".challengeBlockTime").text().trim().slice(1, -1); // get time in preceding tag
             var chapDesc = $(this).find(".challengeBlockDescription").eq(0).text().trim();
-            mapObj[certName][chapName] = {}; // init object
-            mapObj[certName][chapName]["_date"] = toDate(chapTime);
+            data[certName][chapName] = {}; // init object
+            data[certName][chapName]["_date"] = toDate(chapTime);
             if (chapDesc) { // if description exists, add it to map
-              mapObj[certName][chapName]["_desc"] = chapDesc;
+              data[certName][chapName]["_desc"] = chapDesc;
             }
             // start challenge loop
             $(this).find("p.challenge-title").each(function() { // get all chapblock objects
@@ -59,38 +63,45 @@ function mapScrape(baseUrl, user) {
               chalName = chalName.replace(".", "");
               var chalSoon = $(this).find("em").text().trim();
               var chalLink = $(this).find("a").attr("href"); // get link
-              mapObj[certName][chapName][chalName] = {}; // init object
+              data[certName][chapName][chalName] = {}; // init object
               if (chalSoon) {
-                mapObj[certName][chapName][chalName]["_status"] = chalSoon;
+                data[certName][chapName][chalName]["_status"] = chalSoon;
               } else if (chalLink) {
+                if (chalLink.charAt(0) === "/") {
+                  chalLink = chalLink.slice(1);
+                }
                 chalLink = baseUrl + chalLink;
-                linkCount++;
-                mapObj[certName][chapName][chalName]["_link"] = chalLink;
-                keyObj[chalName] = [certName, chapName];
+                data[certName][chapName][chalName]["_link"] = chalLink;
+                map[chalName] = [certName, chapName];
               }
             });
           });
         });
       });
       console.info("[Map Scrape]", "Complete", url);
-      if (user){
-        profileScrape(baseUrl, user, mapObj, keyObj);
+      if (user) {
+        profileScrape(baseUrl, user, data, map, callback);
       }
     }
   });
 }
 
 // profile function
-function profileScrape(baseUrl, user, mapObj, keyObj) {
+function profileScrape(baseUrl, user, data, map, callback) {
   var url = baseUrl + user;
   request(url, function(error, response, html) {
     if (error) {
-      console.error("[Profile Req Error]", url, error);
-      terminate();
+      var err = {
+        "_message": "Cannot request freeCodeCamp profile",
+        "_url": url,
+        "_error": error
+      };
+      console.error("[Error]", err);
+      callback(err, null);
     } else {
       console.info("[Profile Scrape]", "Start", url);
       var $ = cheerio.load(html);
-      mapObj["Deprecated"] = {};
+      data["Deprecated"] = {};
       $("table.table").each(function() { // loop > all tables
         $(this).find("tr").each(function() {
           if (!$(this).find("th").length) {
@@ -103,47 +114,48 @@ function profileScrape(baseUrl, user, mapObj, keyObj) {
             } else if (chalCode.includes("/challenges/")) {
               chalCode = "";
             }
-            if (keyObj.hasOwnProperty(chalName)) {
-              certName = keyObj[chalName][0];
-              chapName = keyObj[chalName][1];
-              mapObj[certName][chapName][chalName]["_dateC"] = chalDateC;
+            if (chalCode.charAt(0) === "/") {
+              chalCode = chalCode.slice(1);
+            }
+            if (map.hasOwnProperty(chalName)) {
+              var certName = map[chalName][0];
+              var chapName = map[chalName][1];
+              data[certName][chapName][chalName]["_dateC"] = chalDateC;
               if (chalDateU) {
-                mapObj[certName][chapName][chalName]["_dateU"] = chalDateU;
+                data[certName][chapName][chalName]["_dateU"] = chalDateU;
               }
               if (chalCode) {
-                mapObj[certName][chapName][chalName]["_code"] = chalCode;
+                data[certName][chapName][chalName]["_code"] = chalCode;
               }
             } else {
-              console.error("[Profile Error]", "Deprecated", chalName, chalDateC);
-              mapObj["Deprecated"][chalName] = {};
-              mapObj["Deprecated"][chalName]["_dateC"] = chalDateC;
+              data["Deprecated"][chalName] = {};
+              data["Deprecated"][chalName]["_dateC"] = chalDateC;
               if (chalDateU) {
-                mapObj["Deprecated"][chalName]["_dateU"] = chalDateU;
+                data["Deprecated"][chalName]["_dateU"] = chalDateU;
               }
-              mapObj["Deprecated"][chalName]["_code"] = chalCode;
+              data["Deprecated"][chalName]["_code"] = chalCode;
             }
           }
         });
       });
       console.info("[Profile Scrape]", "Complete", url);
-      console.log(mapObj);
+      callback(null, data);
     }
   });
 }
 
-function terminate() {
-  console.error("[Fatal Error]", "Terminated");
-  process.exit(1);
-}
+app.get("/", function(req, res) {
+  scrape("https://www.freecodecamp.com/", "htko89", function(err, data) {
+    if (err) {
+      res.status(500).jsonp({
+        "_errors": err
+      });
+    } else {
+      res.status(200).jsonp(data);
+    }
+  });
+});
 
-// main logic
-mapScrape("https://www.freecodecamp.com/", "htko89");
-
-// app.get('/', function (req, res) {
-//   res.send('Hello World!')
-//   // res.jsonp(obj)
-// })
-//
-// app.listen(3000, function () {
-//   console.log('Example app listening on port 3000!')
-// })
+app.listen(3000, function() {
+  console.log("Example app listening on port 3000!");
+});
