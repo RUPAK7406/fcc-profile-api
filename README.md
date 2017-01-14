@@ -83,9 +83,9 @@ node server.js
 ### Example error output (HTTP code 500).
 ```json
 {
-  Errors: {
-    _message: "Cannot request freeCodeCamp map"
-    _error: {...}
+  "Errors": {
+    "_message": "Cannot request freeCodeCamp map",
+    "_error": {}
   }
 }
 ```
