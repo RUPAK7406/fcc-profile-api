@@ -2,166 +2,46 @@
 "use strict";
 
 // global node modules
-var request = require("request");
-var cheerio = require("cheerio");
+var scrapers = require("./scrapers.js");
 var helmet = require("helmet");
 var express = require("express");
 var app = express();
 app.use(helmet());
 
-// map functions
-function mapScrape(baseUrl, user, callback) {
-  var url = baseUrl + "map";
-  console.info("[Map Scrape]", "Start", url);
-  var data = {};
-  var map = {};
-  var toDate = function(str) {
-    var arr = str.split(" ");
-    var date = new Date(0);
-    if (arr[1].includes("hour")) {
-      date.setHours(arr[0]);
-    } else if (arr[1].includes("minute")) {
-      date.setMinutes(arr[0]);
-    } else {
-      date = null;
-    }
-    return date;
-  };
-  request(url, function(error, response, html) {
-    if (error) {
-      var err = {
-        "_message": "Cannot request freeCodeCamp map",
-        "_url": url,
-        "_error": error
-      };
-      console.error("[Error]", err);
-      callback(err, null);
-    } else {
-      console.info("[Map Process]", "Request", url);
-      var $ = cheerio.load(html);
-      $("#accordion").each(function() { // loop > all tables
-        // start certification loop
-        $(this).find("div.certBlock").each(function() { // loop > all cert blocks
-          var certName = $(this).prev().find("a").text().trim(); // get name in preceding tag
-          data[certName] = {}; // init object
-          // start chapter loop
-          $(this).find("div.chapterBlock").each(function() { // get all chapblock objects
-            var chapName = $(this).prev().find("a").text().trim(); // get name in preceding tag
-            var chapTime = $(this).prev().find(".challengeBlockTime").text().trim().slice(1, -1); // get time in preceding tag
-            var chapDesc = $(this).find(".challengeBlockDescription").eq(0).text().trim();
-            data[certName][chapName] = {}; // init object
-            data[certName][chapName]["_date"] = toDate(chapTime);
-            if (chapDesc) { // if description exists, add it to map
-              data[certName][chapName]["_desc"] = chapDesc;
-            }
-            // start challenge loop
-            $(this).find("p.challenge-title").each(function() { // get all chapblock objects
-              var chalName = "";
-              if ($(this).find("span").length > 1) { // if span containers > 1
-                chalName = $(this).find("span").eq(0).text().trim(); // get first span text
-              } else {
-                chalName = $($(this).contents()[0]).text().trim(); // get first content element text
-              }
-              chalName = chalName.replace(".", "");
-              var chalSoon = $(this).find("em").text().trim();
-              var chalLink = $(this).find("a").attr("href"); // get link
-              data[certName][chapName][chalName] = {}; // init object
-              if (chalSoon) {
-                data[certName][chapName][chalName]["_status"] = chalSoon;
-              } else if (chalLink) {
-                if (chalLink.charAt(0) === "/") {
-                  chalLink = chalLink.slice(1);
-                }
-                chalLink = baseUrl + chalLink;
-                data[certName][chapName][chalName]["_link"] = chalLink;
-                map[chalName] = [certName, chapName];
-              }
-            });
-          });
-        });
-      });
-      console.info("[Map Process]", "Complete", url);
-      if (user) {
-        profileScrape(baseUrl, user, data, map, callback);
-      }
-    }
-  });
-}
-
-// profile function
-function profileScrape(baseUrl, user, data, map, callback) {
-  var url = baseUrl + user;
-  console.info("[Profile Scrape]", "Request", url);
-  request(url, function(error, response, html) {
-    if (error) {
-      var err = {
-        "_message": "Cannot request freeCodeCamp profile",
-        "_url": url,
-        "_error": error
-      };
-      console.error("[Error]", err);
-      callback(err, null);
-    } else {
-      console.info("[Profile Process]", "Start", url);
-      var $ = cheerio.load(html);
-      data["Deprecated"] = {};
-      $("table.table").each(function() { // loop > all tables
-        $(this).find("tr").each(function() {
-          if (!$(this).find("th").length) {
-            var chalName = $(this).find("td.col-xs-12.visible-xs a").text().trim();
-            var chalDateC = $(this).find("td.col-xs-2.hidden-xs").eq(0).text().trim();
-            var chalDateU = $(this).find("td.col-xs-2.hidden-xs").eq(1).text().trim();
-            var chalCode = $(this).find("td.col-xs-12.visible-xs a").attr("href"); // get link
-            if (chalCode.includes("?solution=")) {
-              chalCode = baseUrl + chalCode;
-            } else if (chalCode.includes("/challenges/")) {
-              chalCode = "";
-            }
-            if (chalCode.charAt(0) === "/") {
-              chalCode = chalCode.slice(1);
-            }
-            if (map.hasOwnProperty(chalName)) {
-              var certName = map[chalName][0];
-              var chapName = map[chalName][1];
-              data[certName][chapName][chalName]["_dateC"] = chalDateC;
-              if (chalDateU) {
-                data[certName][chapName][chalName]["_dateU"] = chalDateU;
-              }
-              if (chalCode) {
-                data[certName][chapName][chalName]["_code"] = chalCode;
-              }
-            } else {
-              data["Deprecated"][chalName] = {};
-              data["Deprecated"][chalName]["_dateC"] = chalDateC;
-              if (chalDateU) {
-                data["Deprecated"][chalName]["_dateU"] = chalDateU;
-              }
-              data["Deprecated"][chalName]["_code"] = chalCode;
-            }
-          }
-        });
-      });
-      console.info("[Profile Process]", "Complete", url);
-      callback(null, data);
-    }
-  });
-}
-
 // main logic
 var time = new Date();
 var port = 8080;
 
+
 app.get("/", function(req, res) {
-  mapScrape("https://www.freecodecamp.com/", "htko89", function(err, data) {
-    if (err) {
-      res.status(500).jsonp({
-        "Errors": err
-      });
+  scrapers.mapScrape("htko89", res, mapFinish);
+});
+
+function mapFinish(err, user, data, map, res) {
+  if (err) {
+    res.status(500).jsonp({
+      "Errors": err
+    });
+  } else {
+    if (user) {
+      if(data && map){
+        scrapers.profileScrape(user, data, map, res, profileFinish);
+      }
     } else {
       res.status(200).jsonp(data);
     }
-  });
-});
+  }
+}
+
+function profileFinish (err, user, data, map, res) {
+  if (err) {
+    res.status(500).jsonp({
+      "Errors": err
+    });
+  } else {
+    res.status(200).jsonp(data);
+  }
+}
 
 app.listen(port, function() {
   console.info("[FCC-Profile-API]", "Server initialized at port " + port);
