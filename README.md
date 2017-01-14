@@ -18,7 +18,7 @@ photo:
 code: "https://github.com/htko89/fcc-profile-api"
 ---
 # Personal Project
-Built with Node, Express, Cheerio, and Request, this tool allows you to access the FreeCodeCamp challenge map and your profile via `json` or `jsonp` callbacks.
+JSON(P) API for FreeCodeCamp profile and curriculum map. Built with Node, Express, Cheerio, and Request.
 
 ## Server Install:
 * Do the following in a system with node & npm v6.9.4 :
