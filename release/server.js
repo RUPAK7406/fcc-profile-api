@@ -14,7 +14,7 @@ var port = 8080;
 
 
 app.get("/", function(req, res) {
-  scrapers.mapScrape("htko89", res, mapFinish);
+  scrapers.mapScrape(req.query.user, res, mapFinish); // scrape map first to build a json structure
 });
 
 function mapFinish(err, user, data, map, res) {
@@ -23,7 +23,7 @@ function mapFinish(err, user, data, map, res) {
       "Errors": err
     });
   } else {
-    if (user) {
+    if (user) { // If username is given, then scrape profile
       if(data && map){
         scrapers.profileScrape(user, data, map, res, profileFinish);
       }

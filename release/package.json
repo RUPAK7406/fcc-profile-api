@@ -13,9 +13,6 @@
     "request": "^2.79.0"
   },
   "scripts": {
-    "map": "node full.js map",
-    "profile": "node full.js profile htko89",
-    "full": "node full.js full htko89",
     "server": "node server.js"
   },
   "dependencies": {
