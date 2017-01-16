@@ -32,10 +32,10 @@ node server.js
 
 ## Server Usage:
 * Your installed api server is available at: [http://localhost:80/](http://localhost:80/)
+* **JSONP url**, example: [http://localhost:80/?user=your_username&callback=test](http://localhost:80/?user=your_username&callback=test)
+* **JSON url**, example: [http://localhost:80/?user=your_username](http://localhost:80/?user=your_username)
+* User and callback arguments are optional, example: [http://localhost:80/](http://localhost:80/)
 * **I also host a server for public use** (be fair!) at: http://fcc-profile-api.htko.ca/
-* **JSONP url**, example: http://fcc-profile-api.htko.ca/?user=your_username&callback=
-* **JSON url**, example: http://fcc-profile-api.htko.ca/?user=your_username
-* User and callback arguments are optional, example: http://fcc-profile-api.htko.ca/
 
 ## Data Structure:
 * **HINT**: Don't specify a username to see how the curriculum map is organized. (use a linter)
