@@ -10,7 +10,7 @@ app.use(helmet());
 
 // main logic
 var time = new Date();
-var port = 8080;
+var port = 80;
 
 
 app.get("/", function(req, res) {
