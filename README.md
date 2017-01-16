@@ -30,13 +30,13 @@ node server.js
 ```
 
 ## Server Usage:
-* Your installed api server is available at: http://localhost:8080/
+* Your installed api server is available at: http://localhost:80/
 * **I also host a server for public use** (be fair!) at: http://fcc-profile-api.htko.ca/
-* **JSONP url**: http://fcc-profile-api.htko.ca/?username=your_username&callback=
-* **JSON url**: http://fcc-profile-api.htko.ca/?username=your_username
-* Username and callback are both optional: http://fcc-profile-api.htko.ca/
+* **JSONP url**, example: http://fcc-profile-api.htko.ca/?user=your_username&callback=
+* **JSON url**, example: http://fcc-profile-api.htko.ca/?user=your_username
+* User and callback arguments are optional, example: http://fcc-profile-api.htko.ca/
 
-## Data Usage
+## Data Structure:
 * **HINT**: Don't specify a username to see how the curriculum map is organized. (use a linter)
 * Data returned are nested objects: Certification > Chapter > Challenge.
 * Older challenges that have been removed from the FreeCodeCamp curriculum is under `Deprecated` key.
