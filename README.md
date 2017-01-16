@@ -15,6 +15,7 @@ tools:
 cover: "cover.jpg"
 photo:
   - "cover.jpg"
+link: "http://fcc-profile-api.htko.ca/"
 code: "https://github.com/htko89/fcc-profile-api"
 ---
 # Personal Project
