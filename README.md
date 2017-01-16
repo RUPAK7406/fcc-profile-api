@@ -31,7 +31,7 @@ node server.js
 ```
 
 ## Server Usage:
-* Your installed api server is available at: http://localhost:80/
+* Your installed api server is available at: [http://localhost:80/](http://localhost:80/)
 * **I also host a server for public use** (be fair!) at: http://fcc-profile-api.htko.ca/
 * **JSONP url**, example: http://fcc-profile-api.htko.ca/?user=your_username&callback=
 * **JSON url**, example: http://fcc-profile-api.htko.ca/?user=your_username
