@@ -1,8 +1,8 @@
 ---
-type: "folio"
+type: "project"
 draft: false
 date: "2017-01-14"
-title: "fcc-profile-api"
+title: "Profile Api"
 parent: "fcc"
 topics:
   - "code"
