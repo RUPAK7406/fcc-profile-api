@@ -13,7 +13,7 @@ var time = new Date();
 var port = 80;
 
 
-app.get("/", function(req, res) {
+app.get("/fcc", function(req, res) {
   scrapers.mapScrape(req.query.user, res, mapFinish); // scrape map first to build a json structure
 });
 

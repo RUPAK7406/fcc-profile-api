@@ -144,5 +144,6 @@ var profileScrape = function(user, data, map, res, callback) {
   });
 };
 
+// exports
 module.exports.mapScrape      = mapScrape;
 module.exports.profileScrape  = profileScrape;
