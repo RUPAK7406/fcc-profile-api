@@ -1,22 +1,22 @@
 ---
-type: "project"
+type: project
 draft: false
-date: "2017-01-14"
-title: "Profile Api"
-parent: "fcc"
+date: '2017-01-14'
+title: Profile Api
 topics:
-  - "code"
+  - code
 tools:
-  - "node.js"
-  - "express.js"
-  - "cheerio"
-  - "request"
-  - "rest API"
-cover: "cover.jpg"
-photo:
-  - "cover.jpg"
-link: "http://api.htko.ca/fcc"
-code: "https://github.com/htko89/fcc-profile-api"
+  - node.js
+  - express.js
+  - cheerio
+  - request
+  - rest API
+link: 'http://api.htko.ca/fcc'
+code: 'https://github.com/htko89/fcc-profile-api'
+photos:
+  - cover.jpg
+  - cover.jpg
+path: code/fcc/profile-api
 ---
 # Personal Project
 JSON(P) API for FreeCodeCamp profile and curriculum map. Built with Node, Express, Cheerio, and Request.
