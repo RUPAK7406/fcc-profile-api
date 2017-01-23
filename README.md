@@ -19,7 +19,7 @@ path: code/fcc/profile-api
 JSON(P) API for FreeCodeCamp profile and curriculum map. Built with Node, Express, Cheerio, and Request
 
 # Example
-An example of this API in use is on the FreeCodeCamp project page here on my [Portfolio](http://htko.ca/project/code/fcc/free-code-camp/README/) and also on [GitHub](https://github.com/htko89/free-code-camp).
+An example of this API in use is on the [FreeCodeCamp](http://htko.ca/project/code/fcc/free-code-camp/README/) project page.
 
 ## Server Install:
 * Do the following in a system with node & npm v6.9.4 :
