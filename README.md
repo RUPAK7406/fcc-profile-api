@@ -13,9 +13,6 @@ tools:
   - rest API
 link: 'http://api.htko.ca/fcc'
 code: 'https://github.com/htko89/fcc-profile-api'
-photos:
-  - cover.jpg
-  - cover.jpg
 path: code/fcc/profile-api
 ---
 # Personal Project
