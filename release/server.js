@@ -12,10 +12,10 @@ var app = express();
 app.use(helmet());
 
 // https certs
-// var cert = {
-//   key: fs.readFileSync("/srv/certs/shared.key", "utf8"),
-//   cert: fs.readFileSync("/srv/certs/shared.crt", "utf8")
-// };
+var cert = {
+  key: fs.readFileSync("/srv/certs/shared.key", "utf8"),
+  cert: fs.readFileSync("/srv/certs/shared.crt", "utf8")
+};
 
 // main logic
 var time = new Date();
