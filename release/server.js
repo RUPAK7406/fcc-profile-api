@@ -12,7 +12,7 @@ var app = express();
 app.use(helmet());
 
 // https certs
-var cert = {
+var certs = {
   key: fs.readFileSync("/srv/certs/shared.key", "utf8"),
   cert: fs.readFileSync("/srv/certs/shared.crt", "utf8")
 };
@@ -53,6 +53,6 @@ function profileFinish(err, user, data, map, res) {
 http.createServer(app).listen(80, function () {
    console.info("[FCC-Profile-API]", "HTTP server initialized");
 });
-https.createServer(cert, app).listen(443, function () {
+https.createServer(certs, app).listen(443, function () {
    console.info("[FCC-Profile-API]", "HTTPS server initialized");
 });
