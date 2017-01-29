@@ -12,7 +12,9 @@ var baseUrl = "https://www.freecodecamp.com/";
 var mapScrape = function(user, res, callback) {
   var url = baseUrl + "map";
   console.info("[Map Scrape]", "Start", url);
-  var data = {};
+  var data = {
+    "_map": []
+  };
   var map = {};
   var toDate = function(str) {
     var arr = str.split(" ");
@@ -40,21 +42,27 @@ var mapScrape = function(user, res, callback) {
       var $ = cheerio.load(html);
       $("#accordion").each(function() { // loop > all tables
         // start certification loop
-        $(this).find("div.certBlock").each(function() { // loop > all cert blocks
+        $(this).find("div.certBlock").each(function(certIdx) { // loop > all cert blocks
           var certName = $(this).prev().find("a").text().trim(); // get name in preceding tag
-          data[certName] = {}; // init object
+          data["_map"][certIdx] = { // init object
+            "_name": certName,
+            "_data": []
+          };
           // start chapter loop
-          $(this).find("div.chapterBlock").each(function() { // get all chapblock objects
+          $(this).find("div.chapterBlock").each(function(chapIdx) { // get all chapblock objects
             var chapName = $(this).prev().find("a").text().trim(); // get name in preceding tag
             var chapTime = $(this).prev().find(".challengeBlockTime").text().trim().slice(1, -1); // get time in preceding tag
             var chapDesc = $(this).find(".challengeBlockDescription").eq(0).text().trim();
-            data[certName][chapName] = {}; // init object
-            data[certName][chapName]["_time"] = toDate(chapTime);
+            data["_map"][certIdx]["_data"][chapIdx] = { // init object
+              "_name": chapName,
+              "_data": []
+            }
+            data["_map"][certIdx]["_data"][chapIdx]["_time"] = toDate(chapTime);
             if (chapDesc) { // if description exists, add it to map
-              data[certName][chapName]["_desc"] = chapDesc;
+              data["_map"][certIdx]["_data"][chapIdx]["_desc"] = chapDesc;
             }
             // start challenge loop
-            $(this).find("p.challenge-title").each(function() { // get all chapblock objects
+            $(this).find("p.challenge-title").each(function(chalIdx) { // get all chapblock objects
               var chalName = "";
               if ($(this).find("span").length > 1) { // if span containers > 1
                 chalName = $(this).find("span").eq(0).text().trim(); // get first span text
@@ -64,16 +72,18 @@ var mapScrape = function(user, res, callback) {
               chalName = chalName.replace(".", "");
               var chalSoon = $(this).find("em").text().trim();
               var chalLink = $(this).find("a").attr("href"); // get link
-              data[certName][chapName][chalName] = {}; // init object
+              data["_map"][certIdx]["_data"][chapIdx]["_data"][chalIdx] = { // init object
+                "_name": chalName
+              }
               if (chalSoon) {
-                data[certName][chapName][chalName]["_status"] = chalSoon;
+                data["_map"][certIdx]["_data"][chapIdx]["_data"][chalIdx]["_status"] = chalSoon;
               } else if (chalLink) {
                 if (chalLink.charAt(0) === "/") {
                   chalLink = chalLink.slice(1);
                 }
                 chalLink = baseUrl + chalLink;
-                data[certName][chapName][chalName]["_link"] = chalLink;
-                map[chalName] = [certName, chapName];
+                data["_map"][certIdx]["_data"][chapIdx]["_data"][chalIdx]["_link"] = chalLink;
+                map[chalName] = [certIdx, chapIdx, chalIdx];
               }
             });
           });
@@ -101,7 +111,7 @@ var profileScrape = function(user, data, map, res, callback) {
     } else {
       console.info("[Profile Process]", "Start", url);
       var $ = cheerio.load(html);
-      data["Deprecated"] = {};
+      var deprIdx = 0;
       $("table.table").each(function() { // loop > all tables
         $(this).find("tr").each(function() {
           if (!$(this).find("th").length) {
@@ -109,31 +119,39 @@ var profileScrape = function(user, data, map, res, callback) {
             var chalDateC = $(this).find("td.col-xs-2.hidden-xs").eq(0).text().trim();
             var chalDateU = $(this).find("td.col-xs-2.hidden-xs").eq(1).text().trim();
             var chalCode = $(this).find("td.col-xs-12.visible-xs a").attr("href"); // get link
+            if (chalCode.charAt(0) === "/") {
+              chalCode = chalCode.slice(1);
+            }
             if (chalCode.includes("?solution=")) {
               chalCode = baseUrl + chalCode;
             } else if (chalCode.includes("/challenges/")) {
               chalCode = "";
             }
-            if (chalCode.charAt(0) === "/") {
-              chalCode = chalCode.slice(1);
-            }
             if (map.hasOwnProperty(chalName)) {
-              var certName = map[chalName][0];
-              var chapName = map[chalName][1];
-              data[certName][chapName][chalName]["_dateC"] = chalDateC;
+              var certIdx = map[chalName][0];
+              var chapIdx = map[chalName][1];
+              var chalIdx = map[chalName][2];
+              data["_map"][certIdx]["_data"][chapIdx]["_data"][chalIdx]["_dateC"] = chalDateC;
               if (chalDateU) {
-                data[certName][chapName][chalName]["_dateU"] = chalDateU;
+                data["_map"][certIdx]["_data"][chapIdx]["_data"][chalIdx]["_dateU"] = chalDateU;
               }
               if (chalCode) {
-                data[certName][chapName][chalName]["_code"] = chalCode;
+                data["_map"][certIdx]["_data"][chapIdx]["_data"][chalIdx]["_code"] = chalCode;
               }
             } else {
-              data["Deprecated"][chalName] = {};
-              data["Deprecated"][chalName]["_dateC"] = chalDateC;
-              if (chalDateU) {
-                data["Deprecated"][chalName]["_dateU"] = chalDateU;
+              if (!data.hasOwnProperty('_deprecated')){
+                data["_deprecated"] = []; // init object
               }
-              data["Deprecated"][chalName]["_code"] = chalCode;
+              data["_deprecated"][deprIdx] = { // init object
+                "_name": chalName
+              };
+              data["_deprecated"][deprIdx] = {};
+              data["_deprecated"][deprIdx]["_dateC"] = chalDateC;
+              if (chalDateU) {
+                data["_deprecated"][deprIdx]["_dateU"] = chalDateU;
+              }
+              data["_deprecated"][deprIdx]["_code"] = chalCode;
+              deprIdx++;
             }
           }
         });
@@ -145,5 +163,5 @@ var profileScrape = function(user, data, map, res, callback) {
 };
 
 // exports
-module.exports.mapScrape      = mapScrape;
-module.exports.profileScrape  = profileScrape;
+module.exports.mapScrape = mapScrape;
+module.exports.profileScrape = profileScrape;

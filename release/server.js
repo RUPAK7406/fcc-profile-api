@@ -10,7 +10,7 @@ app.use(helmet());
 
 // main logic
 var time = new Date();
-var port = 80;
+var port = 8080;
 
 
 app.get("/fcc", function(req, res) {
@@ -20,7 +20,7 @@ app.get("/fcc", function(req, res) {
 function mapFinish(err, user, data, map, res) {
   if (err) {
     res.status(500).jsonp({
-      "Errors": err
+      "_errors": err
     });
   } else {
     if (user) { // If username is given, then scrape profile
@@ -36,7 +36,7 @@ function mapFinish(err, user, data, map, res) {
 function profileFinish (err, user, data, map, res) {
   if (err) {
     res.status(500).jsonp({
-      "Errors": err
+      "_errors": err
     });
   } else {
     res.status(200).jsonp(data);
