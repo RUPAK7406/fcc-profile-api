@@ -6,8 +6,8 @@ title: Profile Api
 topics:
   - code
 tools:
-  - node.js
-  - express.js
+  - node
+  - express
   - cheerio
   - request
   - rest API
