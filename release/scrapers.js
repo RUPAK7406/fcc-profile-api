@@ -57,7 +57,7 @@ var mapScrape = function(user, res, callback) {
               "_name": chapName,
               "_data": []
             }
-            data["_map"][certIdx]["_data"][chapIdx]["_time"] = toDate(chapTime);
+            data["_map"][certIdx]["_data"][chapIdx]["_time"] = chapTime;
             if (chapDesc) { // if description exists, add it to map
               data["_map"][certIdx]["_data"][chapIdx]["_desc"] = chapDesc;
             }
