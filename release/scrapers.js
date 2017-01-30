@@ -69,9 +69,10 @@ var mapScrape = function(user, res, callback) {
               } else {
                 chalName = $($(this).contents()[0]).text().trim(); // get first content element text
               }
-              chalName = chalName.replace(".", "");
-              chalName = chalName.replace("-", "");
-              chalName = chalName.replace("()", "");
+              chalName = chalName.split(".").join("");
+              chalName = chalName.split("-").join("");
+              chalName = chalName.split("(").join("");
+              chalName = chalName.split(")").join("");
               var chalSoon = $(this).find("em").text().trim();
               var chalLink = $(this).find("a").attr("href"); // get link
               data["_map"][certIdx]["_data"][chapIdx]["_data"][chalIdx] = { // init object
