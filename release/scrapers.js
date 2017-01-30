@@ -147,7 +147,6 @@ var profileScrape = function(user, data, map, res, callback) {
               data["_deprecated"][deprIdx] = { // init object
                 "_name": chalName
               };
-              data["_deprecated"][deprIdx] = {};
               data["_deprecated"][deprIdx]["_dateC"] = chalDateC;
               if (chalDateU) {
                 data["_deprecated"][deprIdx]["_dateU"] = chalDateU;
