@@ -4,7 +4,7 @@
   "main": "full.js",
   "author": "Tony Ko",
   "license": "MIT",
-  "repository": "https://github.com/htko89/fcc-spider",
+  "repository": "https://github.com/htkoca/fcc-profile-api",
   "devDependencies": {
     "cheerio": "^0.22.0",
     "express": "^4.14.0",
