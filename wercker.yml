@@ -8,3 +8,6 @@ build:
     - script:
       name: connect to www.htko.ca
       code: ssh ${ssh_user}@www.htko.ca "cd /srv/projects/code/fcc/profile-api && git pull"
+    - script:
+      name: restart docker container
+      code: ssh ${ssh_user}@www.htko.ca "docker restart node_fcc-profile-api_1"
